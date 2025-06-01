@@ -5,494 +5,494 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Prompt Karakter</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS Variables for Light Mode - Minimalist */
-        :root {
-            --bg-body: #f8fafc; /* Sangat terang, bersih */
-            --bg-header: #ffffff;
-            --bg-container: #ffffff;
-            --bg-section: #f0f4f8; /* Sedikit abu-abu untuk kontras halus */
-            --text-primary: #334155; /* Darker text for readability */
-            --text-secondary: #64748b; /* Medium gray for secondary text */
-            --border-color: #e2e8f0; /* Soft border */
-            --input-bg: #ffffff;
-            --input-border: #cbd5e1; /* Light gray border */
-            --input-border-focus: #4f46e5; /* Primary purple */
-            --button-primary-bg: #6366f1;
-            --button-primary-hover-bg: #4f46e5;
-            --button-copy-bg: #e0e7ff;
-            --button-copy-color: #4f46e5;
-            --button-copy-hover-bg: #c7d2fe;
-            --copied-message-bg: #10b981;
-            --typo-bg: #fffbeb;
-            --typo-border: #fcd34d;
-            --typo-color: #b45309;
-            --main-title-color: #1e293b; /* Darker for strong presence */
-            --header-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            --bg-footer: #ffffff;
-            --text-footer: #64748b;
-            --footer-border-top: 1px solid #e2e8f0;
-        }
-
-        /* CSS Variables for Dark Mode - Refined Gradient Minimalist */
-        body.dark-mode {
-            --bg-body: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); /* Subtle, elegant gradient */
-            --bg-header: #2d3748;
-            --bg-container: #2d3748;
-            --bg-section: #374151; /* Slightly lighter than container for depth */
-            --text-primary: #e2e8f0; /* Light text */
-            --text-secondary: #94a3b8; /* Lighter gray text */
-            --border-color: #4a5568;
-            --input-bg: #2d3748;
-            --input-border: #4a5568;
-            --input-border-focus: #818cf8;
-            --button-primary-bg: #4c51bf;
-            --button-primary-hover-bg: #3c4190;
-            --button-copy-bg: #4a5568; /* Darker copy button */
-            --button-copy-color: #e2e8f0;
-            --button-copy-hover-bg: #5a67d8;
-            --copied-message-bg: #059669;
-            --typo-bg: #4a320a;
-            --typo-border: #92400e;
-            --typo-color: #fbd38d;
-            --main-title-color: #e2e8f0; /* Light text for dark mode title */
-            --header-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            --bg-footer: #2d3748;
-            --text-footer: #94a3b8;
-            --footer-border-top: 1px solid #4a5568;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-body); /* Use background for gradient */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 0;
-            color: var(--text-primary);
-            transition: background 0.5s ease, color 0.3s ease; /* Smooth transition for gradient */
+            background-color: #f8fafc; /* Tailwind gray-50 */
+            color: #1e293b; /* Tailwind slate-800 */
         }
-
-        header {
-            width: 100%;
-            background-color: var(--bg-header);
-            padding: 1rem 2rem;
-            box-shadow: var(--header-shadow);
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .main-content-wrapper {
-            padding: 20px;
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-grow: 1;
-        }
-
         .container {
-            background-color: var(--bg-container);
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            padding: 32px;
             max-width: 900px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            margin-top: 24px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-        @media (min-width: 768px) {
-            .container {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        .form-section, .output-section {
-            padding: 16px;
-            border-radius: 12px;
-            background-color: var(--bg-section);
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        .form-group label {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 8px;
+        .form-label {
             display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #334155; /* Tailwind slate-700 */
         }
-        .form-group input, .form-group textarea, .form-group select {
+        .form-input, .form-textarea, .form-select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-            background-color: var(--input-bg);
-            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e1; /* Tailwind slate-300 */
+            border-radius: 0.5rem; /* rounded-lg */
+            background-color: #ffffff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
             outline: none;
-            border-color: var(--input-border-focus);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+            border-color: #6366f1; /* Tailwind indigo-500 */
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* ring-indigo-200 */
         }
-        .btn-primary {
-            background-color: var(--button-primary-bg);
-            color: #ffffff;
-            padding: 14px 24px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .btn-primary, .btn-secondary { /* Added .btn-secondary */
+            background-color: #6366f1; /* Tailwind indigo-500 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin: 0.5rem; /* Added margin for spacing between buttons */
         }
         .btn-primary:hover {
-            background-color: var(--button-primary-hover-bg);
-            transform: translateY(-2px);
+            background-color: #4f46e5; /* Tailwind indigo-600 */
+            transform: translateY(-1px);
         }
-        .btn-primary:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
+        .btn-secondary { /* Style for the new button */
+            background-color: #10b981; /* Tailwind emerald-500 */
         }
-        .output-box {
-            background-color: var(--bg-container);
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            padding: 16px;
-            min-height: 100px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-size: 15px;
-            color: var(--text-primary);
-            position: relative;
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        .btn-secondary:hover {
+            background-color: #059669; /* Tailwind emerald-600 */
+            transform: translateY(-1px);
         }
-        .output-box.loading::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--border-color);
-            border-top: 4px solid var(--input-border-focus);
+        .btn-copy {
+            background-color: #e2e8f0; /* Tailwind slate-200 */
+            color: #334155; /* Tailwind slate-700 */
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 500;
+            transition: background-color 0.2s;
+            margin-left: 0.5rem;
+        }
+        .btn-copy:hover {
+            background-color: #cbd5e1; /* Tailwind slate-300 */
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6366f1;
             border-radius: 50%;
+            width: 30px;
+            height: 30px;
             animation: spin 1s linear infinite;
-        }
-        .output-box.loading {
-            color: transparent;
+            margin: 1rem auto;
+            display: none; /* Hidden by default */
         }
         @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .copy-button {
-            background-color: var(--button-copy-bg);
-            color: var(--button-copy-color);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease;
-            position: absolute;
-            top: 8px;
-            right: 8px;
-        }
-        .copy-button:hover {
-            background-color: var(--button-copy-hover-bg);
-        }
-        .copy-button:active {
-            transform: translateY(1px);
-        }
-        .copied-message {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background-color: var(--copied-message-bg);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .copied-message.show {
-            opacity: 1;
-        }
-        .typo-notification {
-            background-color: var(--typo-bg);
-            border: 1px solid var(--typo-border);
-            color: var(--typo-color);
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-        }
-        .typo-notification strong {
-            margin-right: 8px;
+        .message-box {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: none;
+            font-weight: 500;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            animation: fadeinout 3s forwards;
         }
 
-        /* Custom styles for the main title and subtitle (minimalist) */
-        .main-title {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--main-title-color);
-            letter-spacing: -0.01em;
-            margin-top: 2rem;
-            margin-bottom: 0.25rem;
-            text-shadow: none;
-            transition: color 0.3s ease;
-        }
-
-        .sub-title {
-            font-size: 1rem;
-            font-weight: 400;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-            transition: color 0.3s ease;
-        }
-
-        /* Dark Mode Toggle Button */
-        #darkModeToggle {
-            background-color: var(--bg-section);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        #darkModeToggle:hover {
-            background-color: var(--border-color);
-        }
-
-        /* Footer styles */
-        footer {
-            width: 100%;
-            background-color: var(--bg-footer);
-            padding: 1.5rem 2rem;
-            margin-top: auto; /* Pushes footer to the bottom */
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--text-footer);
-            border-top: var(--footer-border-top);
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        @keyframes fadeinout {
+            0% { opacity: 0; top: 0px; }
+            10% { opacity: 1; top: 20px; }
+            90% { opacity: 1; top: 20px; }
+            100% { opacity: 0; top: 0px; }
         }
     </style>
 </head>
-<body>
-    <header>
-        <button id="darkModeToggle">
-            <svg id="sunIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h1M3 12h1m15.325-4.275l-.707-.707M4.372 19.372l-.707-.707M19.071 4.929l-.707.707M4.929 19.071l-.707.707M18 12a6 6 0 11-12 0 6 6 0 0112 0z" />
-            </svg>
-            <svg id="moonIcon" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9 9 0 008.354-5.646z" />
-            </svg>
-            <span id="toggleText">Dark Mode</span>
-        </button>
+<body class="antialiased">
+    <div class="message-box" id="messageBox"></div>
+
+    <header class="bg-indigo-600 text-white py-8 shadow-md rounded-b-xl">
+        <div class="container text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2">Generator Prompt Karakter</h1>
+            <p class="text-lg md:text-xl opacity-90">Membuat prompt karakter konsisten secara otomatis berdasarkan input pengguna.</p>
+        </div>
     </header>
 
-    <div class="main-content-wrapper">
-        <h2 class="main-title text-center">Generator Prompt Karakter</h2>
-        <h3 class="sub-title text-center">Membuat prompt karakter konsisten secara otomatis berdasarkan input pengguna.</h3>
+    <main class="container my-8">
+        <section class="card mb-8">
+            <h2 class="text-2xl font-semibold mb-6 text-center text-indigo-700">Form Identitas Karakter untuk Text-to-Image</h2>
+            <form id="characterForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="namaKarakter" class="form-label">1. Nama Karakter:</label>
+                    <input type="text" id="namaKarakter" class="form-input" placeholder="Contoh: Miko, Dewi, dll" required>
+                </div>
+                <div>
+                    <label for="usia" class="form-label">2. Usia:</label>
+                    <input type="text" id="usia" class="form-input" placeholder="Contoh: 8 tahun / remaja / dewasa muda" required>
+                </div>
+                <div>
+                    <label for="jenisKelamin" class="form-label">3. Jenis Kelamin:</label>
+                    <select id="jenisKelamin" class="form-select" required>
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                        <option value="Non-biner">Non-biner</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="rasEtnis" class="form-label">4. Ras / Etnis:</label>
+                    <input type="text" id="rasEtnis" class="form-input" placeholder="Misalnya: Asia Tenggara, Afrika, Kaukasia, dll" required>
+                </div>
+                <div>
+                    <label for="warnaKulit" class="form-label">5. Warna Kulit:</label>
+                    <input type="text" id="warnaKulit" class="form-input" placeholder="Deskripsi spesifik, misalnya: medium tan, putih kemerahan, gelap hangat, dll" required>
+                </div>
+                <div>
+                    <label for="gayaRambut" class="form-label">6. Warna dan Gaya Rambut:</label>
+                    <input type="text" id="gayaRambut" class="form-input" placeholder="Misal: hitam panjang sebahu, keriting cokelat pendek, lurus pirang panjang, dll" required>
+                </div>
+                <div>
+                    <label for="bentukMata" class="form-label">7. Warna dan Bentuk Mata:</label>
+                    <input type="text" id="bentukMata" class="form-input" placeholder="Contoh: mata bulat besar warna hazel, sipit hitam pekat, dll" required>
+                </div>
+                <div>
+                    <label for="ciriWajah" class="form-label">8. Ciri Khas Wajah:</label>
+                    <input type="text" id="ciriWajah" class="form-input" placeholder="Contoh: pipi chubby, hidung pesek, tahi lalat di bawah mata, dll">
+                </div>
+                <div>
+                    <label for="aksesori" class="form-label">9. Aksesori Wajah / Tubuh:</label>
+                    <input type="text" id="aksesori" class="form-input" placeholder="Contoh: anting hoop, kacamata bulat, kalung liontin, gelang kulit, dll">
+                </div>
+                <div>
+                    <label for="pakaian" class="form-label">10. Pakaian Utama:</label>
+                    <input type="text" id="pakaian" class="form-input" placeholder="Deskripsi jelas: warna, bahan, gaya. Misalnya: kaos putih oversized dan celana denim biru" required>
+                </div>
+                <div>
+                    <label for="gayaBusana" class="form-label">11. Gaya Busana Umum:</label>
+                    <input type="text" id="gayaBusana" class="form-input" placeholder="Kasual, formal, fantasi, cyberpunk, anak-anak, dll" required>
+                </div>
+                <div>
+                    <label for="poseEkspresi" class="form-label">12. Pose atau Ekspresi Favorit:</label>
+                    <input type="text" id="poseEkspresi" class="form-input" placeholder="Contoh: tersenyum ceria, cemberut lucu, duduk sambil melamun, dll">
+                </div>
+                <div>
+                    <label for="aktivitasProperti" class="form-label">13. Aktivitas atau Properti Khas:</label>
+                    <input type="text" id="aktivitasProperti" class="form-input" placeholder="Misal: memegang boneka, membawa tas ransel, sedang bermain, dll">
+                </div>
+                <div>
+                    <label for="lingkunganLatar" class="form-label">14. Lingkungan atau Latar Umum:</label>
+                    <input type="text" id="lingkunganLatar" class="form-input" placeholder="Misalnya: taman bermain, kamar tidur pink, hutan gelap, kota futuristik, dll">
+                </div>
+                <div>
+                    <label for="gayaIlustrasi" class="form-label">15. Gaya Ilustrasi:</label>
+                    <input type="text" id="gayaIlustrasi" class="form-input" placeholder="Contoh: 3D cartoon ala Pixar, anime gloomy, fine line art tribal, semi-realistic painting, dll" required>
+                </div>
+                <div>
+                    <label for="moodNuansa" class="form-label">16. Mood atau Nuansa:</label>
+                    <input type="text" id="moodNuansa" class="form-input" placeholder="Hangat dan menyenangkan / gelap dan misterius / imut dan menenangkan, dll" required>
+                </div>
 
-        <div class="container">
-            <div class="form-section">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Form Identitas Karakter</h2>
-                <form id="characterForm" class="space-y-4">
-                    <div class="form-group">
-                        <label for="namaKarakter">1. Nama Karakter:</label>
-                        <input type="text" id="namaKarakter" placeholder="Contoh: Miko, Dewi" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="usia">2. Usia:</label>
-                        <input type="text" id="usia" placeholder="Contoh: 8 tahun / remaja / dewasa muda" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="jenisKelamin">3. Jenis Kelamin:</label>
-                        <select id="jenisKelamin" class="rounded-lg">
-                            <option value="">Pilih</option>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
-                            <option value="Non-biner">Non-biner</option>
-                            <option value="Tidak disebutkan">Tidak disebutkan</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="rasEtnis">4. Ras / Etnis:</label>
-                        <input type="text" id="rasEtnis" placeholder="Misalnya: Asia Tenggara, Afrika, Kaukasia" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="warnaKulit">5. Warna Kulit:</label>
-                        <input type="text" id="warnaKulit" placeholder="Deskripsi spesifik, misalnya: medium tan, putih kemerahan" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="warnaGayaRambut">6. Warna dan Gaya Rambut:</label>
-                        <input type="text" id="warnaGayaRambut" placeholder="Misal: hitam panjang sebahu, keriting cokelat pendek" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="warnaBentukMata">7. Warna dan Bentuk Mata:</label>
-                        <input type="text" id="warnaBentukMata" placeholder="Contoh: mata bulat besar warna hazel, sipit hitam pekat" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="ciriKhasWajah">8. Ciri Khas Wajah:</label>
-                        <input type="text" id="ciriKhasWajah" placeholder="Contoh: pipi chubby, hidung pesek, tahi lalat di bawah mata" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="aksesori">9. Aksesori Wajah / Tubuh:</label>
-                        <input type="text" id="aksesori" placeholder="Contoh: anting hoop, kacamata bulat, kalung liontin" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="pakaianUtama">10. Pakaian Utama:</label>
-                        <textarea id="pakaianUtama" rows="2" placeholder="Deskripsi jelas: warna, bahan, gaya. Misalnya: kaos putih oversized dan celana denim biru" class="rounded-lg"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="gayaBusana">11. Gaya Busana Umum:</label>
-                        <input type="text" id="gayaBusana" placeholder="Kasual, formal, fantasi, cyberpunk, anak-anak" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="poseEkspresi">12. Pose atau Ekspresi Favorit:</label>
-                        <input type="text" id="poseEkspresi" placeholder="Contoh: tersenyum ceria, cemberut lucu, duduk sambil melamun" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="aktivitasProperti">13. Aktivitas atau Properti Khas:</label>
-                        <input type="text" id="aktivitasProperti" placeholder="Misal: memegang boneka, membawa tas ransel, sedang bermain" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="lingkunganLatar">14. Lingkungan atau Latar Umum:</label>
-                        <input type="text" id="lingkunganLatar" placeholder="Misalnya: taman bermain, kamar tidur pink, hutan gelap" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="gayaIlustrasi">15. Gaya Ilustrasi:</label>
-                        <input type="text" id="gayaIlustrasi" placeholder="Contoh: 3D cartoon ala Pixar, anime gloomy, semi-realistic painting" class="rounded-lg">
-                    </div>
-                    <div class="form-group">
-                        <label for="moodNuansa">16. Mood atau Nuansa:</label>
-                        <input type="text" id="moodNuansa" placeholder="Hangat dan menyenangkan / gelap dan misterius / imut dan menenangkan" class="rounded-lg">
-                    </div>
-                    <button type="submit" class="btn-primary w-full" id="generateButton">
-                        <span id="buttonText">Hasilkan Prompt</span>
-                        <span id="loadingSpinner" class="hidden h-5 w-5 border-4 border-white border-t-transparent rounded-full ml-2"></span>
-                    </button>
-                </form>
+                <div class="md:col-span-2 text-center">
+                    <button type="submit" class="btn-primary">Buat Prompt Karakter</button>
+                    <button type="button" id="generateAutoBtn" class="btn-secondary">Generate Otomatis</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="results" class="card hidden">
+            <h2 class="text-2xl font-semibold mb-4 text-center text-indigo-700">Hasil Prompt Karakter</h2>
+            <div id="typoCorrectionNotice" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded-md hidden" role="alert">
+                <p class="font-bold">Perhatian:</p>
+                <p id="typoMessage"></p>
             </div>
+            <div class="loading-spinner" id="loadingSpinner"></div>
 
-            <div class="output-section space-y-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Hasil Prompt</h2>
+            <div id="promptContent" class="hidden">
+                <h3 class="text-xl font-medium mb-2 text-indigo-600">Narasi Deskriptif Karakter:</h3>
+                <p id="characterNarrative" class="mb-6 leading-relaxed text-gray-700"></p>
 
-                <div id="typoNotification" class="hidden typo-notification" role="alert">
-                    <strong class="font-bold">Perhatian!</strong>
-                    <span class="block sm:inline" id="typoMessage"></span>
+                <div class="mb-6">
+                    <div class="flex items-center mb-2">
+                        <h3 class="text-xl font-medium text-indigo-600">Prompt Bahasa Indonesia:</h3>
+                        <button class="btn-copy" onclick="copyToClipboard('promptID')">Salin</button>
+                    </div>
+                    <textarea id="promptID" class="form-textarea h-32" readonly></textarea>
                 </div>
 
                 <div>
-                    <label class="font-semibold text-gray-700 mb-2 block">Narasi Deskriptif Karakter:</label>
-                    <div id="narasiOutput" class="output-box relative">
-                        <button class="copy-button" onclick="copyToClipboard('narasiOutput', this)">Salin</button>
-                        <span class="copied-message">Disalin!</span>
+                    <div class="flex items-center mb-2">
+                        <h3 class="text-xl font-medium text-indigo-600">Prompt Bahasa Inggris:</h3>
+                        <button class="btn-copy" onclick="copyToClipboard('promptEN')">Salin</button>
                     </div>
-                </div>
-
-                <div>
-                    <label class="font-semibold text-gray-700 mb-2 block">Prompt Bahasa Indonesia:</label>
-                    <div id="promptIdOutput" class="output-box relative">
-                        <button class="copy-button" onclick="copyToClipboard('promptIdOutput', this)">Salin</button>
-                        <span class="copied-message">Disalin!</span>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="font-semibold text-gray-700 mb-2 block">Prompt Bahasa Inggris:</label>
-                    <div id="promptEnOutput" class="output-box relative">
-                        <button class="copy-button" onclick="copyToClipboard('promptEnOutput', this)">Salin</button>
-                        <span class="copied-message">Disalin!</span>
-                    </div>
+                    <textarea id="promptEN" class="form-textarea h-32" readonly></textarea>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
-    <footer>
-        © 2025 Dodi Outright. All rights reserved.
+    <footer class="bg-gray-800 text-white py-6 text-center rounded-t-xl">
+        <p class="text-sm">&copy; 2025 Dodi Outright. All rights reserved.</p>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const sunIcon = document.getElementById('sunIcon');
-            const moonIcon = document.getElementById('moonIcon');
-            const toggleText = document.getElementById('toggleText');
+        // Function to display a message box
+        function showMessageBox(message) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.textContent = message;
+            messageBox.style.display = 'block';
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 3000); // Hide after 3 seconds
+        }
 
-            // Check for saved theme preference or system preference
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.body.classList.add('dark-mode');
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
-                toggleText.textContent = 'Light Mode';
-            } else {
-                document.body.classList.remove('dark-mode');
-                sunIcon.classList.remove('hidden');
-                moonIcon.classList.add('hidden');
-                toggleText.textContent = 'Dark Mode';
-            }
+        // Function to copy text to clipboard
+        function copyToClipboard(elementId) {
+            const copyText = document.getElementById(elementId);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy");
+            showMessageBox('Teks berhasil disalin!');
+        }
 
-            darkModeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark-mode');
-                if (document.body.classList.contains('dark-mode')) {
-                    localStorage.setItem('theme', 'dark');
-                    sunIcon.classList.add('hidden');
-                    moonIcon.classList.remove('hidden');
-                    toggleText.textContent = 'Light Mode';
-                } else {
-                    localStorage.setItem('theme', 'light');
-                    sunIcon.classList.remove('hidden');
-                    moonIcon.classList.add('hidden');
-                    toggleText.textContent = 'Dark Mode';
+        // Simple typo correction dictionary (can be expanded)
+        const typoCorrections = {
+            "laki laki": "Laki-laki",
+            "perempuan": "Perempuan",
+            "non biner": "Non-biner",
+            "asia tenggara": "Asia Tenggara",
+            "afrika": "Afrika",
+            "kaukasia": "Kaukasia",
+            "medium tan": "medium tan",
+            "putih kemerahan": "putih kemerahan",
+            "gelap hangat": "gelap hangat",
+            "hitam panjang sebahu": "hitam panjang sebahu",
+            "keriting cokelat pendek": "keriting cokelat pendek",
+            "lurus pirang panjang": "lurus pirang panjang",
+            "mata bulat besar warna hazel": "mata bulat besar warna hazel",
+            "sipit hitam pekat": "sipit hitam pekat",
+            "pipi chubby": "pipi chubby",
+            "hidung pesek": "hidung pesek",
+            "tahi lalat di bawah mata": "tahi lalat di bawah mata",
+            "anting hoop": "anting hoop",
+            "kacamata bulat": "kacamata bulat",
+            "kalung liontin": "kalung liontin",
+            "gelang kulit": "gelang kulit",
+            "kaos putih oversized dan celana denim biru": "kaos putih oversized dan celana denim biru",
+            "kasual": "Kasual",
+            "formal": "Formal",
+            "fantasi": "Fantasi",
+            "cyberpunk": "Cyberpunk",
+            "anak anak": "Anak-anak",
+            "tersenyum ceria": "tersenyum ceria",
+            "cemberut lucu": "cemberut lucu",
+            "duduk sambil melamun": "duduk sambil melamun",
+            "memegang boneka": "memegang boneka",
+            "membawa tas ransel": "membawa tas ransel",
+            "sedang bermain": "sedang bermain",
+            "taman bermain": "taman bermain",
+            "kamar tidur pink": "kamar tidur pink",
+            "hutan gelap": "hutan gelap",
+            "kota futuristik": "kota futuristik",
+            "3d cartoon ala pixar": "3D cartoon ala Pixar",
+            "anime gloomy": "anime gloomy",
+            "fine line art tribal": "fine line art tribal",
+            "semi realistic painting": "semi-realistic painting",
+            "hangat dan menyenangkan": "Hangat dan menyenangkan",
+            "gelap dan misterius": "Gelap dan misterius",
+            "imut dan menenangkan": "Imut dan menenangkan"
+        };
+
+        function correctTypo(text) {
+            let originalText = text;
+            let correctedText = text.toLowerCase();
+            let corrected = false;
+            for (const typo in typoCorrections) {
+                if (correctedText.includes(typo)) {
+                    correctedText = correctedText.replace(typo, typoCorrections[typo]);
+                    corrected = true;
                 }
-            });
-        });
+            }
+            // If no specific typo found, try to capitalize first letter if it's a single word
+            if (!corrected && correctedText.length > 0) {
+                correctedText = correctedText.charAt(0).toUpperCase() + correctedText.slice(1);
+            }
+            return { original: originalText, corrected: correctedText, wasCorrected: corrected || (originalText !== correctedText) };
+        }
 
+        // --- Expanded Data for Auto-Generation ---
+        const maleNames = [
+            "Rian", "Bima", "Arif", "Dimas", "Fajar", "Gilang", "Hadi", "Irfan", "Joko", "Kevin",
+            "Lukman", "Musa", "Nanda", "Oscar", "Prabu", "Qosim", "Rizky", "Sakti", "Tio", "Umar",
+            "Vino", "Wahyu", "Xavier", "Yoga", "Zaki", "Aditya", "Bayu", "Candra", "Deni", "Eko",
+            "Gatot", "Hendra", "Indra", "Jefri", "Kurniawan", "Leo", "Miko", "Nico", "Pandu", "Roni",
+            "Agus", "Budi", "Cahyono", "Darma", "Eko", "Ferry", "Guntur", "Herman", "Imran", "Jaka",
+            "Kusuma", "Laksamana", "Mulyadi", "Nugroho", "Parman", "Rahman", "Slamet", "Tatang", "Ujang", "Vicky"
+        ];
+
+        const femaleNames = [
+            "Dewi", "Putri", "Siti", "Ayu", "Bunga", "Cindy", "Dina", "Eka", "Fitri", "Gita",
+            "Hana", "Indah", "Julia", "Kartika", "Lina", "Maya", "Nia", "Olivia", "Putri", "Rani",
+            "Sari", "Tia", "Uli", "Vina", "Wulan", "Yuni", "Zara", "Amelia", "Bella", "Citra",
+            "Dian", "Elsa", "Fani", "Grace", "Hilda", "Irma", "Jasmine", "Kiki", "Laras", "Mila",
+            "Annisa", "Bintang", "Cahaya", "Dwi", "Erlina", "Fatimah", "Giselle", "Hilda", "Intan", "Jessica",
+            "Karina", "Lestari", "Maria", "Nabila", "Permata", "Rina", "Shinta", "Tari", "Umay", "Vania"
+        ];
+
+        const neutralNames = [
+            "Alex", "Casey", "Jamie", "Jordan", "Kai", "Morgan", "Riley", "Sam", "Taylor", "Jesse",
+            "Chris", "Dakota", "Drew", "Finley", "Harper", "Quinn", "Rowan", "Skylar", "Devin", "Blake"
+        ];
+
+        const ages = [
+            "5 tahun", "8 tahun", "10 tahun", "remaja awal (13-16 tahun)", "remaja akhir (17-19 tahun)",
+            "dewasa muda (20-25 tahun)", "dewasa (26-35 tahun)", "dewasa madya (36-45 tahun)",
+            "paruh baya (46-55 tahun)", "lansia (60+ tahun)", "anak-anak (6-12 tahun)",
+            "balita (1-5 tahun)", "bayi (0-1 tahun)", "pemuda", "wanita muda"
+        ];
+
+        const races = [
+            "Asia Tenggara (Indonesia/Malaysia)", "Asia Timur (Jepang/Korea)", "Asia Selatan (India/Pakistan)",
+            "Afrika Sub-Sahara", "Afrika Utara", "Kaukasia (Eropa Barat)", "Kaukasia (Eropa Timur)",
+            "Amerika Latin (Meksiko/Brazil)", "Timur Tengah (Arab/Persia)", "Pribumi Amerika",
+            "Melanesia", "Polinesia", "Eropa Utara (Skandinavia)", "Eropa Selatan (Italia/Spanyol)",
+            "Mixed-race (campuran)", "Aborigin Australia"
+        ];
+
+        const skinColors = [
+            "putih pucat", "putih gading", "putih kemerahan", "kuning langsat", "medium tan",
+            "cokelat zaitun", "cokelat muda", "sawo matang", "gelap hangat", "hitam pekat",
+            "kulit tembaga", "kulit karamel", "gelap kemerahan", "sangat gelap", "kulit keemasan"
+        ];
+
+        const hairStyles = [
+            "hitam panjang lurus", "keriting cokelat pendek", "pirang bergelombang sebahu",
+            "merah menyala ikal panjang", "biru pastel bob", "perak lurus panjang",
+            "cokelat gelap gimbal", "hitam cepak undercut", "pirang kuncir kuda tinggi",
+            "ungu kepang dua", "rambut berombak cokelat terang", "rambut pendek berantakan hitam",
+            "rambut panjang berponi pirang", "rambut merah keriting afro", "rambut gimbal panjang abu-abu"
+        ];
+
+        const eyeDetails = [
+            "mata bulat besar warna hazel", "sipit hitam pekat", "biru cerah almond",
+            "hijau zamrud tajam", "cokelat gelap menawan", "abu-abu dingin sipit",
+            "mata kucing kuning terang", "merah menyala (fantasi)", "emas berkilau",
+            "ungu misterius", "mata biru langit", "mata cokelat muda besar", "mata hitam sipit dan dalam",
+            "mata hijau kekuningan", "mata abu-abu kebiruan"
+        ];
+
+        const facialFeatures = [
+            "pipi chubby", "hidung pesek", "tahi lalat di bawah mata kanan", "lesung pipi di kedua sisi",
+            "alis tebal dan rapi", "bibir penuh dan merah", "garis rahang tegas",
+            "bekas luka tipis di pipi kiri", "freckles di hidung dan pipi", "dagu terbelah",
+            "wajah oval", "pipi tirus", "hidung mancung", "mata sipit alami", "senyum lebar"
+        ];
+
+        const accessories = [
+            "anting hoop emas besar", "kacamata bulat klasik", "kalung liontin batu permata biru",
+            "gelang kulit bertumpuk", "syal sutra warna-warni", "topi baret wol hitam",
+            "sarung tangan kulit hitam", "cincin perak besar di jari telunjuk",
+            "piercing hidung kecil", "tato lengan minimalis geometris",
+            "headband sporty", "jam tangan digital futuristik", "bros antik di kerah",
+            "gelang keberuntungan benang merah", "tas selempang kulit"
+        ];
+
+        const mainOutfits = [
+            "kaos putih oversized dan celana denim biru", "gaun musim panas floral kuning",
+            "jas formal hitam dengan kemeja putih dan dasi merah", "armor fantasi perak mengkilap",
+            "jaket kulit hitam dan celana kargo hijau", "seragam sekolah jepang biru navy",
+            "pakaian tradisional (misal: kebaya modern)", "hoodie abu-abu dan celana jogger hitam",
+            "kemeja flanel merah dan celana chino krem", "rok plisket midi dan blouse putih",
+            "sweater rajut tebal dan celana corduroy", "baju renang one-piece motif tropis",
+            "kostum penyihir jubah gelap", "pakaian tentara kamuflase", "pakaian kerja formal biru"
+        ];
+
+        const clothingStyles = [
+            "Kasual", "Formal", "Fantasi", "Cyberpunk", "Anak-anak", "Vintage", "Bohemian",
+            "Sporty", "Minimalis", "Gothic", "Streetwear", "Etnik", "Preppy", "Hipster", "Punk",
+            "Business Casual", "Athleisure"
+        ];
+
+        const posesExpressions = [
+            "tersenyum ceria dan mata berbinar", "cemberut lucu dengan bibir manyun",
+            "duduk sambil melamun menatap jauh", "berdiri tegak dengan tangan di pinggang dan ekspresi percaya diri",
+            "tertawa lepas dengan kepala mendongak", "menatap serius dan dalam ke depan",
+            "bersembunyi di balik pohon dengan ekspresi penasaran", "melompat kegirangan dengan kedua tangan di udara",
+            "berpose elegan dengan satu tangan di pinggul", "ekspresi terkejut dengan mata membulat",
+            "berjalan santai dengan headphone", "memegang dagu sambil berpikir", "menyilangkan tangan dengan ekspresi angkuh",
+            "sedang berlari dengan wajah fokus", "mengedipkan mata genit"
+        ];
+
+        const activitiesProps = [
+            "memegang boneka beruang lusuh", "membawa tas ransel penuh buku pelajaran",
+            "sedang bermain gitar akustik di taman", "menulis di jurnal kulit cokelat tua",
+            "membaca buku tebal di sofa", "memegang pedang berkilau dan siap bertarung",
+            "sedang minum kopi panas di kafe", "menggambar di sketchbook dengan pensil",
+            "bermain dengan kucing oranye lucu", "mengoperasikan konsol futuristik dengan jari cekatan",
+            "memotret dengan kamera DSLR", "memasak di dapur", "berolahraga di gym",
+            "memancing di danau", "berkebun dengan sekop kecil"
+        ];
+
+        const environments = [
+            "taman bermain yang cerah dengan ayunan", "kamar tidur pink yang nyaman dengan banyak bantal",
+            "hutan gelap dan misterius saat senja", "kota futuristik dengan gedung pencakar langit neon",
+            "kafe yang ramai dengan aroma kopi", "perpustakaan kuno dengan rak buku tinggi",
+            "pegunungan bersalju dengan puncak tertutup awan", "pantai saat matahari terbenam dengan ombak tenang",
+            "laboratorium ilmiah modern dengan tabung reaksi", "pasar tradisional yang sibuk dengan pedagang",
+            "jembatan tua di atas sungai", "jalan gang sempit kota besar", "ruang kelas kosong",
+            "istana mewah zaman dahulu", "pesawat luar angkasa dengan jendela besar"
+        ];
+
+        const illustrationStyles = [
+            "3D cartoon ala Pixar", "anime gloomy dan detail", "fine line art tribal",
+            "semi-realistic painting", "gaya komik Amerika klasik", "cat air lembut dan dreamy",
+            "sketsa pensil hitam putih", "pixel art retro 8-bit", "realisme hiper fotorealistik",
+            "gaya ilustrasi buku anak-anak ceria", "manga shonen dinamis", "lukisan minyak bertekstur",
+            "pop art warna-warni", "minimalis vektor", "gaya seni fantasi gelap"
+        ];
+
+        const moods = [
+            "Hangat dan menyenangkan", "Gelap dan misterius", "Imut dan menenangkan",
+            "Enerjik dan penuh semangat", "Tenang dan damai", "Melankolis dan introspektif",
+            "Petualang dan berani", "Ceria dan optimis", "Serius dan fokus", "Misterius dan memikat",
+            "Gembira dan riang", "Sedih dan putus asa", "Marah dan geram", "Bingung dan ragu",
+            "Santai dan rileks"
+        ];
+
+        // --- End of Expanded Data ---
 
         document.getElementById('characterForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Prevents the form from submitting normally
+            event.preventDefault(); // Prevent default form submission
 
-            // Retrieve values from each input
-            const characterData = {
+            const resultsSection = document.getElementById('results');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const promptContent = document.getElementById('promptContent');
+            const typoCorrectionNotice = document.getElementById('typoCorrectionNotice');
+            const typoMessage = document.getElementById('typoMessage');
+
+            // Hide previous results and show loading spinner
+            resultsSection.classList.remove('hidden');
+            promptContent.classList.add('hidden');
+            loadingSpinner.style.display = 'block';
+            typoCorrectionNotice.classList.add('hidden');
+
+            const formData = {
                 namaKarakter: document.getElementById('namaKarakter').value,
                 usia: document.getElementById('usia').value,
                 jenisKelamin: document.getElementById('jenisKelamin').value,
                 rasEtnis: document.getElementById('rasEtnis').value,
                 warnaKulit: document.getElementById('warnaKulit').value,
-                warnaGayaRambut: document.getElementById('warnaGayaRambut').value,
-                warnaBentukMata: document.getElementById('warnaBentukMata').value,
-                ciriKhasWajah: document.getElementById('ciriKhasWajah').value,
+                gayaRambut: document.getElementById('gayaRambut').value,
+                bentukMata: document.getElementById('bentukMata').value,
+                ciriWajah: document.getElementById('ciriWajah').value,
                 aksesori: document.getElementById('aksesori').value,
-                pakaianUtama: document.getElementById('pakaianUtama').value,
+                pakaian: document.getElementById('pakaian').value,
                 gayaBusana: document.getElementById('gayaBusana').value,
                 poseEkspresi: document.getElementById('poseEkspresi').value,
                 aktivitasProperti: document.getElementById('aktivitasProperti').value,
@@ -501,59 +501,56 @@
                 moodNuansa: document.getElementById('moodNuansa').value
             };
 
-            // Display loading spinner and clear output
-            const generateButton = document.getElementById('generateButton');
-            const buttonText = document.getElementById('buttonText');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            const narasiOutput = document.getElementById('narasiOutput');
-            const promptIdOutput = document.getElementById('promptIdOutput');
-            const promptEnOutput = document.getElementById('promptEnOutput');
-            const typoNotification = document.getElementById('typoNotification');
-            const typoMessage = document.getElementById('typoMessage');
+            let correctedFields = [];
+            
+            // Apply typo correction
+            for (const key in formData) {
+                if (formData[key] && key !== 'jenisKelamin') { // jenisKelamin is a select, no typo expected
+                    const { original, corrected, wasCorrected } = correctTypo(formData[key]);
+                    if (wasCorrected && original.toLowerCase() !== corrected.toLowerCase()) {
+                        correctedFields.push(`"${original}" menjadi "${corrected}"`);
+                    }
+                    formData[key] = corrected; // Update formData with corrected value
+                }
+            }
 
-            buttonText.textContent = 'Menghasilkan...';
-            loadingSpinner.classList.remove('hidden'); // Show spinner
-            generateButton.disabled = true;
+            if (correctedFields.length > 0) {
+                typoMessage.textContent = `Beberapa teks telah dikoreksi: ${correctedFields.join(', ')}.`;
+                typoCorrectionNotice.classList.remove('hidden');
+            }
 
-            narasiOutput.classList.add('loading');
-            promptIdOutput.classList.add('loading');
-            promptEnOutput.classList.add('loading');
+            // --- Updated promptToLLM for consistency and character focus ---
+            const promptToLLM = `Berdasarkan detail karakter berikut, buatkan:
+            1.  **Narasi deskriptif karakter** yang utuh dalam **bahasa Indonesia**.
+            2.  **Prompt berbahasa Indonesia** yang fokus pada **objek karakter utama** untuk konsistensi, siap digunakan untuk AI art atau text generation.
+            3.  **Prompt berbahasa Inggris** yang **sangat konsisten dengan prompt Bahasa Indonesia** dalam detail dan fokus pada **objek karakter utama**, siap digunakan untuk AI art atau text generation.
 
-            narasiOutput.innerHTML = '<button class="copy-button" onclick="copyToClipboard(\'narasiOutput\', this)">Salin</button><span class="copied-message">Disalin!</span>';
-            promptIdOutput.innerHTML = '<button class="copy-button" onclick="copyToClipboard(\'promptIdOutput\', this)">Salin</button><span class="copied-message">Disalin!</span>';
-            promptEnOutput.innerHTML = '<button class="copy-button" onclick="copyToClipboard(\'promptEnOutput\', this)">Salin</button><span class="copied-message">Disalin!</span>';
+            Detail Karakter:
+            Nama Karakter: ${formData.namaKarakter}
+            Usia: ${formData.usia}
+            Jenis Kelamin: ${formData.jenisKelamin}
+            Ras / Etnis: ${formData.rasEtnis}
+            Warna Kulit: ${formData.warnaKulit}
+            Warna dan Gaya Rambut: ${formData.gayaRambut}
+            Warna dan Bentuk Mata: ${formData.bentukMata}
+            Ciri Khas Wajah: ${formData.ciriWajah || 'Tidak ada ciri khas wajah spesifik.'}
+            Aksesori Wajah / Tubuh: ${formData.aksesori || 'Tidak ada aksesori.'}
+            Pakaian Utama: ${formData.pakaian}
+            Gaya Busana Umum: ${formData.gayaBusana}
+            Pose atau Ekspresi Favorit: ${formData.poseEkspresi || 'Tidak ada pose atau ekspresi spesifik.'}
+            Aktivitas atau Properti Khas: ${formData.aktivitasProperti || 'Tidak ada aktivitas atau properti khas.'}
+            Lingkungan atau Latar Umum: ${formData.lingkunganLatar || 'Latar belakang netral.'}
+            Gaya Ilustrasi: ${formData.gayaIlustrasi}
+            Mood atau Nuansa: ${formData.moodNuansa}
 
-            typoNotification.classList.add('hidden'); // Hide notification on new submission
-            typoMessage.textContent = '';
+            Output harus dalam format JSON dengan tiga kunci: "narrative", "indonesian_prompt", dan "english_prompt".
+            Pastikan narasi, prompt ID, dan prompt EN menggambarkan karakter yang sama persis untuk konsistensi visual. Fokus pada detail fisik dan gaya karakter di kedua prompt.
+            `;
+            // --- End of updated promptToLLM ---
 
             try {
-                // Create prompt for LLM with auto-correction and consistency focus
-                let prompt = `Berdasarkan informasi karakter berikut, yang mungkin mengandung typo atau kesalahan penulisan, harap lakukan koreksi otomatis secara cerdas dan inferensi makna yang benar. Setelah itu, buatlah narasi deskriptif karakter yang utuh, prompt berbahasa Indonesia yang siap digunakan untuk AI art atau text generation, dan prompt berbahasa Inggris yang setara. **Fokus utama adalah pada pembuatan karakter utama yang konsisten di seluruh deskripsi dan prompt.**
-
-Jika Anda mendeteksi adanya potensi typo atau kesalahan penulisan yang Anda koreksi/interpretasi, harap sertakan detailnya di bidang 'typo_details'.
-
-Informasi Karakter:
-Nama Karakter: ${characterData.namaKarakter || 'Tidak disebutkan'}
-Usia: ${characterData.usia || 'Tidak disebutkan'}
-Jenis Kelamin: ${characterData.jenisKelamin || 'Tidak disebutkan'}
-Ras / Etnis: ${characterData.rasEtnis || 'Tidak disebutkan'}
-Warna Kulit: ${characterData.warnaKulit || 'Tidak disebutkan'}
-Warna dan Gaya Rambut: ${characterData.warnaGayaRambut || 'Tidak disebutkan'}
-Warna dan Bentuk Mata: ${characterData.warnaBentukMata || 'Tidak disebutkan'}
-Ciri Khas Wajah: ${characterData.ciriKhasWajah || 'Tidak disebutkan'}
-Aksesori Wajah / Tubuh: ${characterData.aksesori || 'Tidak disebutkan'}
-Pakaian Utama: ${characterData.pakaianUtama || 'Tidak disebutkan'}
-Gaya Busana Umum: ${characterData.gayaBusana || 'Tidak disebutkan'}
-Pose atau Ekspresi Favorit: ${characterData.poseEkspresi || 'Tidak disebutkan'}
-Aktivitas atau Properti Khas: ${characterData.aktivitasProperti || 'Tidak disebutkan'}
-Lingkungan atau Latar Umum: ${characterData.lingkunganLatar || 'Tidak disebutkan'}
-Gaya Ilustrasi: ${characterData.gayaIlustrasi || 'Tidak disebutkan'}
-Mood atau Nuansa: ${characterData.moodNuansa || 'Tidak disebutkan'}
-
-Format output harus berupa JSON dengan kunci 'narasi', 'prompt_id', 'prompt_en', 'typo_detected' (boolean), dan 'typo_details' (string, kosong jika tidak ada typo, berisi detail koreksi jika ada).`;
-
                 let chatHistory = [];
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                chatHistory.push({ role: "user", parts: [{ text: promptToLLM }] });
 
                 const payload = {
                     contents: chatHistory,
@@ -562,22 +559,15 @@ Format output harus berupa JSON dengan kunci 'narasi', 'prompt_id', 'prompt_en',
                         responseSchema: {
                             type: "OBJECT",
                             properties: {
-                                "narasi": { "type": "STRING" },
-                                "prompt_id": { "type": "STRING" },
-                                "prompt_en": { "type": "STRING" },
-                                "typo_detected": { "type": "BOOLEAN" },
-                                "typo_details": { "type": "STRING" }
+                                "narrative": { "type": "STRING" },
+                                "indonesian_prompt": { "type": "STRING" },
+                                "english_prompt": { "type": "STRING" }
                             },
-                            required: ["narasi", "prompt_id", "prompt_en", "typo_detected", "typo_details"]
+                            "propertyOrdering": ["narrative", "indonesian_prompt", "english_prompt"]
                         }
                     }
                 };
-
-                // IMPORTANT: Replace "YOUR_API_KEY_HERE" with your actual Google Cloud API Key if self-hosting.
-                // This API key is automatically provided by Canvas at runtime, but must be explicitly
-                // set when deploying to your own server.
-                const apiKey = "AIzaSyCI8gH3KftmB_mEhg9sCrdDWA1S02VbOEk"; // <--- REPLACE THIS WITH YOUR ACTUAL API KEY IF HOSTING OUTSIDE CANVAS
-
+                const apiKey = "AIzaSyCI8gH3KftmB_mEhg9sCrdDWA1S02VbOEk"; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -594,74 +584,77 @@ Format output harus berupa JSON dengan kunci 'narasi', 'prompt_id', 'prompt_en',
                     const jsonString = result.candidates[0].content.parts[0].text;
                     const parsedJson = JSON.parse(jsonString);
 
-                    // Display results
-                    narasiOutput.innerHTML = `${parsedJson.narasi}<button class="copy-button" onclick="copyToClipboard('narasiOutput', this)">Salin</button><span class="copied-message">Disalin!</span>`;
-                    promptIdOutput.innerHTML = `${parsedJson.prompt_id}<button class="copy-button" onclick="copyToClipboard('promptIdOutput', this)">Salin</button><span class="copied-message">Disalin!</span>`;
-                    promptEnOutput.innerHTML = `${parsedJson.prompt_en}<button class="copy-button" onclick="copyToClipboard('promptEnOutput', this)">Salin</button><span class="copied-message">Disalin!</span>`;
+                    document.getElementById('characterNarrative').textContent = parsedJson.narrative;
+                    document.getElementById('promptID').value = parsedJson.indonesian_prompt;
+                    document.getElementById('promptEN').value = parsedJson.english_prompt;
 
-                    // Display typo notification if detected
-                    if (parsedJson.typo_detected) {
-                        typoNotification.classList.remove('hidden');
-                        typoMessage.textContent = parsedJson.typo_details;
-                    } else {
-                        typoNotification.classList.add('hidden');
-                        typoMessage.textContent = '';
-                    }
-
+                    promptContent.classList.remove('hidden');
                 } else {
-                    narasiOutput.textContent = 'Gagal menghasilkan narasi. Struktur respons tidak terduga.';
-                    promptIdOutput.textContent = 'Gagal menghasilkan prompt ID. Struktur respons tidak terduga.';
-                    promptEnOutput.textContent = 'Gagal menghasilkan prompt EN. Struktur respons tidak terduga.';
-                    typoNotification.classList.remove('hidden');
-                    typoMessage.textContent = 'Terjadi kesalahan internal saat memproses input atau menghasilkan prompt.';
-                    console.error('Unexpected API response structure:', result);
+                    console.error("Unexpected API response structure:", result);
+                    showMessageBox('Gagal menghasilkan prompt. Silakan coba lagi.');
                 }
-
             } catch (error) {
-                console.error('Error fetching data from Gemini API:', error);
-                narasiOutput.textContent = 'Terjadi kesalahan saat menghubungi API. Silakan coba lagi.';
-                promptIdOutput.textContent = 'Terjadi kesalahan saat menghubungi API. Silakan coba lagi.';
-                promptEnOutput.textContent = 'Terjadi kesalahan saat menghubungi API. Silakan coba lagi.';
-                typoNotification.classList.remove('hidden');
-                typoMessage.textContent = 'Terjadi kesalahan jaringan atau API. Silakan periksa koneksi Anda dan coba lagi.';
+                console.error("Error generating prompt:", error);
+                showMessageBox('Terjadi kesalahan saat berkomunikasi dengan server. Silakan coba lagi.');
             } finally {
-                // Hide loading spinner and re-enable button
-                buttonText.textContent = 'Hasilkan Prompt';
-                loadingSpinner.classList.add('hidden'); // Hide spinner
-                generateButton.disabled = false;
-
-                narasiOutput.classList.remove('loading');
-                promptIdOutput.classList.remove('loading');
-                promptEnOutput.classList.remove('loading');
+                loadingSpinner.style.display = 'none'; // Hide loading spinner
             }
         });
 
-        // Function to copy text to clipboard
-        function copyToClipboard(elementId, buttonElement) {
-            const element = document.getElementById(elementId);
-            // Get the text content, excluding the copy button's text and the copied message
-            const textToCopy = element.childNodes[0].textContent.trim();
-
-            const textarea = document.createElement('textarea');
-            textarea.value = textToCopy;
-            textarea.style.position = 'fixed'; // Avoid scrolling to bottom
-            textarea.style.opacity = 0;
-            document.body.appendChild(textarea);
-            textarea.focus();
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                const copiedMessage = buttonElement.nextElementSibling;
-                copiedMessage.classList.add('show');
-                setTimeout(() => {
-                    copiedMessage.classList.remove('show');
-                }, 1500);
-            } catch (err) {
-                console.error('Failed to copy text: ', err);
-            } finally {
-                document.body.removeChild(textarea);
-            }
+        // Helper function to get a random element from an array
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
         }
+
+        // Event listener for the new "Generate Otomatis" button
+        document.getElementById('generateAutoBtn').addEventListener('click', async function() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const resultsSection = document.getElementById('results');
+            const promptContent = document.getElementById('promptContent');
+            const typoCorrectionNotice = document.getElementById('typoCorrectionNotice');
+
+            resultsSection.classList.remove('hidden');
+            promptContent.classList.add('hidden');
+            loadingSpinner.style.display = 'block';
+            typoCorrectionNotice.classList.add('hidden');
+            showMessageBox('Mengisi formulir secara otomatis...');
+
+            // Generate Jenis Kelamin first for consistency
+            const selectedGender = getRandomElement(["Laki-laki", "Perempuan", "Non-biner"]);
+            let selectedName;
+            if (selectedGender === "Laki-laki") {
+                selectedName = getRandomElement(maleNames);
+            } else if (selectedGender === "Perempuan") {
+                selectedName = getRandomElement(femaleNames);
+            } else {
+                selectedName = getRandomElement(neutralNames);
+            }
+
+            // Populate the form fields with randomly generated data
+            document.getElementById('namaKarakter').value = selectedName;
+            document.getElementById('jenisKelamin').value = selectedGender;
+
+            // Fill other fields randomly
+            document.getElementById('usia').value = getRandomElement(ages);
+            document.getElementById('rasEtnis').value = getRandomElement(races);
+            document.getElementById('warnaKulit').value = getRandomElement(skinColors);
+            document.getElementById('gayaRambut').value = getRandomElement(hairStyles);
+            document.getElementById('bentukMata').value = getRandomElement(eyeDetails);
+            document.getElementById('ciriWajah').value = getRandomElement(facialFeatures);
+            document.getElementById('aksesori').value = getRandomElement(accessories);
+            document.getElementById('pakaian').value = getRandomElement(mainOutfits);
+            document.getElementById('gayaBusana').value = getRandomElement(clothingStyles);
+            document.getElementById('poseEkspresi').value = getRandomElement(posesExpressions);
+            document.getElementById('aktivitasProperti').value = getRandomElement(activitiesProps);
+            document.getElementById('lingkunganLatar').value = getRandomElement(environments);
+            document.getElementById('gayaIlustrasi').value = getRandomElement(illustrationStyles);
+            document.getElementById('moodNuansa').value = getRandomElement(moods);
+
+            showMessageBox('Formulir berhasil diisi otomatis. Sekarang membuat prompt...');
+
+            // Programmatically submit the form to generate prompts
+            document.getElementById('characterForm').dispatchEvent(new Event('submit', { cancelable: true }));
+        });
     </script>
 </body>
 </html>
