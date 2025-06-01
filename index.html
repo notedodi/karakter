@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Prompt Karakter</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* CSS Variables for Light Mode */
+        /* CSS Variables for Light Mode - Minimalist */
         :root {
-            --bg-body: #f0f2f5;
-            --bg-header: #ffffff; /* New: Header background */
+            --bg-body: #f8fafc; /* Sangat terang, bersih */
+            --bg-header: #ffffff;
             --bg-container: #ffffff;
-            --bg-section: #f9fafb;
-            --text-primary: #374151;
-            --text-secondary: #6b7280;
-            --border-color: #e5e7eb;
+            --bg-section: #f0f4f8; /* Sedikit abu-abu untuk kontras halus */
+            --text-primary: #334155; /* Darker text for readability */
+            --text-secondary: #64748b; /* Medium gray for secondary text */
+            --border-color: #e2e8f0; /* Soft border */
             --input-bg: #ffffff;
-            --input-border: #d1d5db;
-            --input-border-focus: #6366f1;
+            --input-border: #cbd5e1; /* Light gray border */
+            --input-border-focus: #4f46e5; /* Primary purple */
             --button-primary-bg: #6366f1;
             --button-primary-hover-bg: #4f46e5;
             --button-copy-bg: #e0e7ff;
@@ -28,75 +28,75 @@
             --typo-bg: #fffbeb;
             --typo-border: #fcd34d;
             --typo-color: #b45309;
-            --main-title-color: #4f46e5;
-            --header-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Subtle shadow for header */
-            --bg-footer: #ffffff; /* New: Footer background */
-            --text-footer: #6b7280; /* New: Footer text color */
-            --footer-border-top: 1px solid #e5e7eb; /* New: Footer top border */
+            --main-title-color: #1e293b; /* Darker for strong presence */
+            --header-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            --bg-footer: #ffffff;
+            --text-footer: #64748b;
+            --footer-border-top: 1px solid #e2e8f0;
         }
 
-        /* CSS Variables for Dark Mode */
+        /* CSS Variables for Dark Mode - Refined Gradient Minimalist */
         body.dark-mode {
-            --bg-body: #1a202c;
-            --bg-header: #2d3748; /* Darker header background */
+            --bg-body: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); /* Subtle, elegant gradient */
+            --bg-header: #2d3748;
             --bg-container: #2d3748;
-            --bg-section: #4a5568;
-            --text-primary: #e2e8f0;
-            --text-secondary: #a0aec0;
+            --bg-section: #374151; /* Slightly lighter than container for depth */
+            --text-primary: #e2e8f0; /* Light text */
+            --text-secondary: #94a3b8; /* Lighter gray text */
             --border-color: #4a5568;
             --input-bg: #2d3748;
             --input-border: #4a5568;
             --input-border-focus: #818cf8;
             --button-primary-bg: #4c51bf;
-            --button-primary-hover-bg: #434190;
-            --button-copy-bg: #667eea;
+            --button-primary-hover-bg: #3c4190;
+            --button-copy-bg: #4a5568; /* Darker copy button */
             --button-copy-color: #e2e8f0;
             --button-copy-hover-bg: #5a67d8;
             --copied-message-bg: #059669;
             --typo-bg: #4a320a;
             --typo-border: #92400e;
             --typo-color: #fbd38d;
-            --main-title-color: #818cf8;
-            --header-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Darker shadow for header */
-            --bg-footer: #2d3748; /* Darker footer background */
-            --text-footer: #a0aec0; /* Lighter footer text color */
-            --footer-border-top: 1px solid #4a5568; /* Darker footer top border */
+            --main-title-color: #e2e8f0; /* Light text for dark mode title */
+            --header-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            --bg-footer: #2d3748;
+            --text-footer: #94a3b8;
+            --footer-border-top: 1px solid #4a5568;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
+            background: var(--bg-body); /* Use background for gradient */
             display: flex;
-            flex-direction: column; /* Changed to column for header at top */
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 0; /* Removed padding from body */
+            padding: 0;
             color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background 0.5s ease, color 0.3s ease; /* Smooth transition for gradient */
         }
 
         header {
             width: 100%;
             background-color: var(--bg-header);
-            padding: 1rem 2rem; /* Adjusted padding */
+            padding: 1rem 2rem;
             box-shadow: var(--header-shadow);
             display: flex;
-            justify-content: flex-end; /* Align toggle to the right */
+            justify-content: flex-end;
             align-items: center;
-            position: sticky; /* Sticky header */
+            position: sticky;
             top: 0;
-            z-index: 100; /* Ensure header stays on top */
+            z-index: 100;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .main-content-wrapper {
-            padding: 20px; /* Add padding here for content below header */
+            padding: 20px;
             width: 100%;
-            max-width: 900px; /* Constrain width */
+            max-width: 900px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex-grow: 1; /* Allow content to grow */
+            flex-grow: 1;
         }
 
         .container {
@@ -110,7 +110,7 @@
             grid-template-columns: 1fr;
             gap: 24px;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            margin-top: 24px; /* Space between subtitle and form */
+            margin-top: 24px;
         }
         @media (min-width: 768px) {
             .container {
@@ -249,21 +249,21 @@
             margin-right: 8px;
         }
 
-        /* Custom styles for the main title and subtitle */
+        /* Custom styles for the main title and subtitle (minimalist) */
         .main-title {
-            font-size: 2.5rem;
-            font-weight: 800;
+            font-size: 2.25rem;
+            font-weight: 700;
             color: var(--main-title-color);
-            letter-spacing: -0.025em;
-            margin-top: 2rem; /* Added top margin to push it below header */
+            letter-spacing: -0.01em;
+            margin-top: 2rem;
             margin-bottom: 0.25rem;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+            text-shadow: none;
             transition: color 0.3s ease;
         }
 
         .sub-title {
-            font-size: 1.125rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 400;
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
             line-height: 1.5;
@@ -479,9 +479,9 @@
 
 
         document.getElementById('characterForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Mencegah form dari submit secara default
+            event.preventDefault(); // Prevents the form from submitting normally
 
-            // Mengambil nilai dari setiap input
+            // Retrieve values from each input
             const characterData = {
                 namaKarakter: document.getElementById('namaKarakter').value,
                 usia: document.getElementById('usia').value,
@@ -501,7 +501,7 @@
                 moodNuansa: document.getElementById('moodNuansa').value
             };
 
-            // Menampilkan loading spinner dan mengosongkan output
+            // Display loading spinner and clear output
             const generateButton = document.getElementById('generateButton');
             const buttonText = document.getElementById('buttonText');
             const loadingSpinner = document.getElementById('loadingSpinner');
@@ -512,7 +512,7 @@
             const typoMessage = document.getElementById('typoMessage');
 
             buttonText.textContent = 'Menghasilkan...';
-            loadingSpinner.classList.remove('hidden'); // Menampilkan spinner
+            loadingSpinner.classList.remove('hidden'); // Show spinner
             generateButton.disabled = true;
 
             narasiOutput.classList.add('loading');
@@ -527,7 +527,7 @@
             typoMessage.textContent = '';
 
             try {
-                // Membuat prompt untuk LLM dengan instruksi auto-koreksi dan fokus konsistensi
+                // Create prompt for LLM with auto-correction and consistency focus
                 let prompt = `Berdasarkan informasi karakter berikut, yang mungkin mengandung typo atau kesalahan penulisan, harap lakukan koreksi otomatis secara cerdas dan inferensi makna yang benar. Setelah itu, buatlah narasi deskriptif karakter yang utuh, prompt berbahasa Indonesia yang siap digunakan untuk AI art atau text generation, dan prompt berbahasa Inggris yang setara. **Fokus utama adalah pada pembuatan karakter utama yang konsisten di seluruh deskripsi dan prompt.**
 
 Jika Anda mendeteksi adanya potensi typo atau kesalahan penulisan yang Anda koreksi/interpretasi, harap sertakan detailnya di bidang 'typo_details'.
@@ -573,7 +573,11 @@ Format output harus berupa JSON dengan kunci 'narasi', 'prompt_id', 'prompt_en',
                     }
                 };
 
-                const apiKey = ""; // API key akan disediakan oleh Canvas secara otomatis
+                // IMPORTANT: Replace "YOUR_API_KEY_HERE" with your actual Google Cloud API Key if self-hosting.
+                // This API key is automatically provided by Canvas at runtime, but must be explicitly
+                // set when deploying to your own server.
+                const apiKey = "AIzaSyCI8gH3KftmB_mEhg9sCrdDWA1S02VbOEk"; // <--- REPLACE THIS WITH YOUR ACTUAL API KEY IF HOSTING OUTSIDE CANVAS
+
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -590,12 +594,12 @@ Format output harus berupa JSON dengan kunci 'narasi', 'prompt_id', 'prompt_en',
                     const jsonString = result.candidates[0].content.parts[0].text;
                     const parsedJson = JSON.parse(jsonString);
 
-                    // Menampilkan hasil
-                    narasiOutput.innerHTML = `${parsedJson.narasi}<button class="copy-button" onclick="copyToClipboard(\'narasiOutput\', this)">Salin</button><span class="copied-message">Disalin!</span>`;
-                    promptIdOutput.innerHTML = `${parsedJson.prompt_id}<button class="copy-button" onclick="copyToClipboard(\'promptIdOutput\', this)">Salin</button><span class="copied-message">Disalin!</span>`;
-                    promptEnOutput.innerHTML = `${parsedJson.prompt_en}<button class="copy-button" onclick="copyToClipboard(\'promptEnOutput\', this)">Salin</button><span class="copied-message">Disalin!</span>`;
+                    // Display results
+                    narasiOutput.innerHTML = `${parsedJson.narasi}<button class="copy-button" onclick="copyToClipboard('narasiOutput', this)">Salin</button><span class="copied-message">Disalin!</span>`;
+                    promptIdOutput.innerHTML = `${parsedJson.prompt_id}<button class="copy-button" onclick="copyToClipboard('promptIdOutput', this)">Salin</button><span class="copied-message">Disalin!</span>`;
+                    promptEnOutput.innerHTML = `${parsedJson.prompt_en}<button class="copy-button" onclick="copyToClipboard('promptEnOutput', this)">Salin</button><span class="copied-message">Disalin!</span>`;
 
-                    // Menampilkan notifikasi typo jika terdeteksi
+                    // Display typo notification if detected
                     if (parsedJson.typo_detected) {
                         typoNotification.classList.remove('hidden');
                         typoMessage.textContent = parsedJson.typo_details;
@@ -621,9 +625,9 @@ Format output harus berupa JSON dengan kunci 'narasi', 'prompt_id', 'prompt_en',
                 typoNotification.classList.remove('hidden');
                 typoMessage.textContent = 'Terjadi kesalahan jaringan atau API. Silakan periksa koneksi Anda dan coba lagi.';
             } finally {
-                // Menyembunyikan loading spinner dan mengaktifkan tombol kembali
+                // Hide loading spinner and re-enable button
                 buttonText.textContent = 'Hasilkan Prompt';
-                loadingSpinner.classList.add('hidden'); // Menyembunyikan spinner
+                loadingSpinner.classList.add('hidden'); // Hide spinner
                 generateButton.disabled = false;
 
                 narasiOutput.classList.remove('loading');
@@ -632,7 +636,7 @@ Format output harus berupa JSON dengan kunci 'narasi', 'prompt_id', 'prompt_en',
             }
         });
 
-        // Fungsi untuk menyalin teks ke clipboard
+        // Function to copy text to clipboard
         function copyToClipboard(elementId, buttonElement) {
             const element = document.getElementById(elementId);
             // Get the text content, excluding the copy button's text and the copied message
