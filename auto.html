@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Generator Prompt Karakter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        html.dark body {
+            background-color: #18181b; /* Zinc 900 */
+            color: #e4e4e7; /* Zinc 200 */
+        }
+        html.light body {
+            background-color: #f7fafc; /* Default light */
+            color: #2d3748; /* Default dark text */
+        }
+        html.dark .bg-white {
+            background-color: #27272a; /* Zinc 800 for cards/sections */
+        }
+        html.dark .text-gray-800 { color: #f4f4f5; /* Zinc 100 */ }
+        html.dark .text-gray-700 { color: #d4d4d8; /* Zinc 300 */ }
+        html.dark .text-gray-600 { color: #a1a1aa; /* Zinc 400 */ }
+        html.dark input, html.dark select, html.dark textarea {
+            background-color: #3f3f46; /* Zinc 700 */
+            color: #e4e4e7; /* Zinc 200 */
+            border-color: #52525b; /* Zinc 600 */
+        }
+        html.dark input::placeholder, html.dark textarea::placeholder {
+            color: #a1a1aa; /* Zinc 400 */
+        }
+        html.dark .border-gray-300 { border-color: #52525b; /* Zinc 600 */ }
+        html.dark .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05); }
+        html.dark .shadow-xl { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05); }
+        html.dark .shadow-inner { box-shadow: inset 0 2px 4px 0 rgba(255,255,255,0.03); }
+
+        html.dark .text-red-500 { color: #f87171; } /* Red 400 */
+        html.dark .text-green-600 { color: #4ade80; } /* Green 400 */
+        html.dark .text-yellow-600 { color: #facc15; } /* Yellow 400 */
+        html.dark .text-yellow-400 { color: #fde047; } /* Yellow 300 */
+        html.dark .text-blue-500 { color: #60a5fa; } /* Blue 400 */
+        html.dark .hover\:text-blue-700:hover { color: #3b82f6; } /* Blue 500 */
+        html.dark .hover\:bg-blue-50:hover { background-color: rgba(59, 130, 246, 0.1); }
+        html.dark .text-purple-500 { color: #a855f7; } /* Purple 500 */
+        html.dark .text-orange-500 { color: #f97316; } /* Orange 500 */
+        html.dark .text-green-500 { color: #22c55e; } /* Green 500 for auto-gen loading */
+
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 8px; }
+        html.dark ::-webkit-scrollbar-track { background: #27272a; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 8px; }
+        html.dark ::-webkit-scrollbar-thumb { background: #52525b; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        html.dark ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            background-color: #333;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, bottom 0.3s ease-in-out;
+            font-size: 0.9rem;
+        }
+        .toast.show {
+            opacity: 1;
+            bottom: 30px;
+        }
+        html.dark .toast {
+            background-color: #e4e4e7; /* Zinc 200 */
+            color: #18181b; /* Zinc 900 */
+        }
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-20 rounded-b-lg mx-2 mt-2">
+        <h1 id="header_title" class="text-2xl md:text-3xl font-bold text-gray-800">Generator Prompt Karakter</h1>
+        <div class="flex items-center space-x-3">
+            <button id="language-toggle" class="p-2 rounded-md bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 text-sm font-medium">
+                🇮🇩 ID
+            </button>
+            <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300">
+                <i class="fas fa-moon text-xl" id="theme-icon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-4 md:p-8 flex flex-col gap-8">
+        <section class="bg-white p-6 rounded-xl shadow-xl">
+            <h2 id="section_title_details" class="text-xl md:text-2xl font-semibold mb-6 text-gray-800">Detail Karakter (Untuk Prompt Tunggal)</h2>
+            <form id="character-form" class="space-y-4">
+                <div>
+                    <label for="characterName" id="label_characterName" class="block text-sm font-medium text-gray-700">Nama Karakter</label>
+                    <input type="text" id="characterName" name="characterName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Contoh: Miko, Dewi">
+                    <p id="characterName-warning" class="text-red-500 text-xs mt-1 hidden">Nama Karakter tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="age" id="label_age" class="block text-sm font-medium text-gray-700">Usia</label>
+                    <input type="text" id="age" name="age" placeholder="Contoh: 8 tahun / remaja / dewasa muda" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2">
+                    <p id="age-warning" class="text-red-500 text-xs mt-1 hidden">Usia tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="gender" id="label_gender" class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                    <select id="gender" name="gender" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2">
+                        <option id="option_gender_select" value="">Pilih Jenis Kelamin</option>
+                        <option id="option_gender_male" value="Male">Laki-laki</option>
+                        <option id="option_gender_female" value="Female">Perempuan</option>
+                    </select>
+                    <p id="gender-warning" class="text-red-500 text-xs mt-1 hidden">Jenis Kelamin tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="ethnicity" id="label_ethnicity" class="block text-sm font-medium text-gray-700">Etnis</label>
+                    <input type="text" id="ethnicity" name="ethnicity" placeholder="Contoh: Asia, Kaukasia, Afrika, Latin" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2">
+                    <p id="ethnicity-warning" class="text-red-500 text-xs mt-1 hidden">Etnis tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="skinColor" id="label_skinColor" class="block text-sm font-medium text-gray-700">Warna Kulit</label>
+                    <input type="text" id="skinColor" name="skinColor" placeholder="Contoh: Sawo matang, Pucat, Gelap, Coklat" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2">
+                    <p id="skinColor-warning" class="text-red-500 text-xs mt-1 hidden">Warna Kulit tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="hair" id="label_hair" class="block text-sm font-medium text-gray-700">Warna & Gaya Rambut</label>
+                    <input type="text" id="hair" name="hair" placeholder="Contoh: Hitam lurus panjang, Pirang keriting pendek" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2">
+                    <p id="hair-warning" class="text-red-500 text-xs mt-1 hidden">Warna & Gaya Rambut tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="eye" id="label_eye" class="block text-sm font-medium text-gray-700">Warna & Bentuk Mata</label>
+                    <input type="text" id="eye" name="eye" placeholder="Contoh: Coklat almond, Biru bulat" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2">
+                    <p id="eye-warning" class="text-red-500 text-xs mt-1 hidden">Warna & Bentuk Mata tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="facialFeatures" id="label_facialFeatures" class="block text-sm font-medium text-gray-700">Fitur Wajah</label>
+                    <input type="text" id="facialFeatures" name="facialFeatures" placeholder="Contoh: Lesung pipi, Tahi lalat di pipi, Hidung mancung" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2">
+                    <p id="facialFeatures-warning" class="text-red-500 text-xs mt-1 hidden">Fitur Wajah tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="accessories" id="label_accessories" class="block text-sm font-medium text-gray-700">Aksesori Wajah/Tubuh</label>
+                    <input type="text" id="accessories" name="accessories" placeholder="Contoh: Kacamata, Anting-anting, Tato di lengan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2">
+                    <p id="accessories-warning" class="text-red-500 text-xs mt-1 hidden">Aksesori Wajah/Tubuh tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="outfit" id="label_outfit" class="block text-sm font-medium text-gray-700">Pakaian Utama</label>
+                    <input type="text" id="outfit" name="outfit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Contoh: Jaket kulit hitam, Gaun musim panas">
+                    <p id="outfit-warning" class="text-red-500 text-xs mt-1 hidden">Pakaian Utama tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="fashionStyle" id="label_fashionStyle" class="block text-sm font-medium text-gray-700">Gaya Busana Umum</label>
+                    <input type="text" id="fashionStyle" name="fashionStyle" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Contoh: Kasual, Formal, Bohemian">
+                    <p id="fashionStyle-warning" class="text-red-500 text-xs mt-1 hidden">Gaya Busana Umum tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="poseExpression" id="label_poseExpression" class="block text-sm font-medium text-gray-700">Pose atau Ekspresi Favorit (untuk prompt utama)</label>
+                    <input type="text" id="poseExpression" name="poseExpression" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Contoh: Tersenyum, Melambaikan tangan">
+                    <p id="poseExpression-warning" class="text-red-500 text-xs mt-1 hidden">Pose atau Ekspresi Favorit tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="activityProps" id="label_activityProps" class="block text-sm font-medium text-gray-700">Aktivitas Utama atau Properti (untuk prompt utama)</label>
+                    <input type="text" id="activityProps" name="activityProps" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Contoh: Membaca buku, Memegang gitar">
+                    <p id="activityProps-warning" class="text-red-500 text-xs mt-1 hidden">Aktivitas Utama atau Properti tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="backgroundSetting" id="label_backgroundSetting" class="block text-sm font-medium text-gray-700">Latar Belakang atau Pengaturan Umum (untuk prompt utama)</label>
+                    <input type="text" id="backgroundSetting" name="backgroundSetting" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Contoh: Taman kota, Perpustakaan">
+                    <p id="backgroundSetting-warning" class="text-red-500 text-xs mt-1 hidden">Latar Belakang atau Pengaturan Umum tidak boleh kosong.</p>
+                </div>
+                <div>
+                    <label for="illustrationStyle" id="label_illustrationStyle" class="block text-sm font-medium text-gray-700">Gaya Ilustrasi</label>
+                    <input type="text" id="illustrationStyle" name="illustrationStyle" placeholder="Contoh: Anime, Realistis, Kartun, Fantasi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" onblur="handleCorrection(this, 'illustrationStyle-correction')">
+                    <p id="illustrationStyle-warning" class="text-red-500 text-xs mt-1 hidden">Gaya Ilustrasi tidak boleh kosong.</p>
+                    <span id="illustrationStyle-correction" class="text-yellow-600 dark:text-yellow-400 text-xs mt-1 hidden"></span>
+                </div>
+                <div>
+                    <label for="moodAtmosphere" id="label_moodAtmosphere" class="block text-sm font-medium text-gray-700">Suasana atau Atmosfer (untuk prompt utama)</label>
+                    <input type="text" id="moodAtmosphere" name="moodAtmosphere" placeholder="Contoh: Misterius, Ceria, Dramatis, Tenang" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" onblur="handleCorrection(this, 'moodAtmosphere-correction')">
+                    <p id="moodAtmosphere-warning" class="text-red-500 text-xs mt-1 hidden">Suasana atau Atmosfer tidak boleh kosong.</p>
+                    <span id="moodAtmosphere-correction" class="text-yellow-600 dark:text-yellow-400 text-xs mt-1 hidden"></span>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 mt-6">
+                    <button type="button" id="button_auto_generate" class="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                        <i class="fas fa-magic mr-2"></i>Generate Otomatis
+                    </button>
+                    <button type="submit" id="button_generate_prompt" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                        <i class="fas fa-robot mr-2"></i>Generate Prompt Utama
+                    </button>
+                </div>
+                 <div id="loading-indicator-auto" class="hidden text-center text-green-500 dark:text-green-400 font-semibold mt-4">
+                    <i class="fas fa-circle-notch fa-spin text-2xl mb-1"></i>
+                    <p id="loading_text_auto">Menghasilkan otomatis...</p>
+                </div>
+            </form>
+        </section>
+
+        <section id="results-section" class="bg-white p-6 rounded-xl shadow-xl">
+            <h2 id="section_title_results" class="text-xl md:text-2xl font-semibold mb-6 text-gray-800">Hasil (Prompt Tunggal)</h2>
+            
+            <div id="loading-indicator" class="hidden text-center text-blue-500 font-semibold my-6">
+                <i class="fas fa-spinner fa-spin text-3xl mb-2"></i>
+                <p id="loading_text">Menghasilkan prompt utama...</p>
+            </div>
+            <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative my-6" role="alert">
+                <strong class="font-bold" id="error_strong">Kesalahan!</strong>
+                <span class="block sm:inline" id="error-text"></span>
+            </div>
+
+            <div id="narrative-display-container" class="hidden mb-8">
+                <h3 id="results_narrative_title_unified" class="text-lg font-semibold text-gray-800 mb-2">Narasi Karakter</h3>
+                <div id="narrative-content-div" class="bg-zinc-100 dark:bg-zinc-700 p-4 rounded-lg text-gray-700 dark:text-zinc-200 whitespace-pre-wrap break-words"></div>
+            </div>
+
+            <div id="main-prompt-card-container" class="mb-8">
+                </div>
+            
+            <div id="scene-variations-section" class="hidden mt-8 pt-6 border-t border-gray-300 dark:border-zinc-700">
+                <h3 id="section_title_scene_variations" class="text-xl md:text-2xl font-semibold mb-6 text-gray-800">Variasi Adegan (Untuk Prompt Utama)</h3>
+                <button type="button" id="button_generate_multiple_scene_variations" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 mb-6">
+                    <i class="fas fa-images mr-2"></i>Hasilkan Beberapa Variasi Adegan
+                </button>
+                <div id="loading-indicator-scene" class="hidden text-center text-purple-500 font-semibold my-6">
+                    <i class="fas fa-sync fa-spin text-3xl mb-2"></i>
+                    <p id="loading_text_scene">Menghasilkan variasi adegan...</p>
+                </div>
+                <div id="scene-variations-grid" class="grid gap-6 md:grid-cols-2">
+                    </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white shadow-inner p-4 text-center text-gray-600 text-sm mt-8 rounded-t-lg mx-2 mb-2">
+        <p id="footer_text">© 2025 Dodi Outright. All rights reserved.</p>
+    </footer>
+
+    <div id="toast-notification" class="toast" role="alert"></div>
+
+    <script>
+        // --- Language Data ---
+        const langData = {
+            id: {
+                pageTitle: "Generator Prompt Karakter",
+                header_title: "Generator Prompt Karakter",
+                section_title_details: "Detail Karakter (Untuk Prompt Tunggal)",
+                label_characterName: "Nama Karakter", placeholder_characterName: "Contoh: Miko, Dewi", warning_characterName: "Nama Karakter tidak boleh kosong.",
+                label_age: "Usia", placeholder_age: "Contoh: 8 tahun / remaja / dewasa muda", warning_age: "Usia tidak boleh kosong.",
+                label_gender: "Jenis Kelamin", option_gender_select: "Pilih Jenis Kelamin", option_gender_male: "Laki-laki", option_gender_female: "Perempuan", warning_gender: "Jenis Kelamin tidak boleh kosong.",
+                label_ethnicity: "Etnis", placeholder_ethnicity: "Contoh: Asia, Kaukasia, Afrika, Latin", warning_ethnicity: "Etnis tidak boleh kosong.",
+                label_skinColor: "Warna Kulit", placeholder_skinColor: "Contoh: Sawo matang, Pucat, Gelap, Coklat", warning_skinColor: "Warna Kulit tidak boleh kosong.",
+                label_hair: "Warna & Gaya Rambut", placeholder_hair: "Contoh: Hitam lurus panjang, Pirang keriting pendek", warning_hair: "Warna & Gaya Rambut tidak boleh kosong.",
+                label_eye: "Warna & Bentuk Mata", placeholder_eye: "Contoh: Coklat almond, Biru bulat", warning_eye: "Warna & Bentuk Mata tidak boleh kosong.",
+                label_facialFeatures: "Fitur Wajah", placeholder_facialFeatures: "Contoh: Lesung pipi, Tahi lalat di pipi, Hidung mancung", warning_facialFeatures: "Fitur Wajah tidak boleh kosong.",
+                label_accessories: "Aksesori Wajah/Tubuh", placeholder_accessories: "Contoh: Kacamata, Anting-anting, Tato di lengan", warning_accessories: "Aksesori Wajah/Tubuh tidak boleh kosong.",
+                label_outfit: "Pakaian Utama", placeholder_outfit: "Contoh: Jaket kulit hitam, Gaun musim panas", warning_outfit: "Pakaian Utama tidak boleh kosong.",
+                label_fashionStyle: "Gaya Busana Umum", placeholder_fashionStyle: "Contoh: Kasual, Formal, Bohemian", warning_fashionStyle: "Gaya Busana Umum tidak boleh kosong.",
+                label_poseExpression: "Pose atau Ekspresi Favorit (untuk prompt utama)", warning_poseExpression: "Pose atau Ekspresi Favorit tidak boleh kosong.",
+                label_activityProps: "Aktivitas Utama atau Properti (untuk prompt utama)", warning_activityProps: "Aktivitas Utama atau Properti tidak boleh kosong.",
+                label_backgroundSetting: "Latar Belakang atau Pengaturan Umum (untuk prompt utama)", warning_backgroundSetting: "Latar Belakang atau Pengaturan Umum tidak boleh kosong.",
+                label_illustrationStyle: "Gaya Ilustrasi", placeholder_illustrationStyle: "Contoh: Anime, Realistis, Kartun, Fantasi", warning_illustrationStyle: "Gaya Ilustrasi tidak boleh kosong.",
+                correction_text_prefix: "Dikoreksi menjadi: ",
+                label_moodAtmosphere: "Suasana atau Atmosfer (untuk prompt utama)", warning_moodAtmosphere: "Suasana atau Atmosfer tidak boleh kosong.",
+                button_auto_generate_text: "<i class=\"fas fa-magic mr-2\"></i>Generate Otomatis",
+                button_generate_prompt_text: "<i class=\"fas fa-robot mr-2\"></i>Generate Prompt Utama",
+                button_generate_multiple_scene_variations_text: "<i class=\"fas fa-images mr-2\"></i>Hasilkan Beberapa Variasi Adegan",
+                section_title_results: "Hasil (Prompt Tunggal)",
+                section_title_scene_variations: "Variasi Adegan (Untuk Prompt Utama)",
+                loading_text: "Menghasilkan prompt utama...",
+                loading_text_auto: "Menghasilkan otomatis...",
+                loading_text_scene: "Menghasilkan variasi adegan...",
+                error_strong: "Kesalahan!",
+                error_fill_fields: "Mohon lengkapi semua bidang yang wajib diisi.",
+                error_api_fail: "Gagal menghasilkan. Respons dari API tidak valid.",
+                error_api_fail_status: "Gagal menghasilkan. Kesalahan server (Status: ",
+                error_api_fail_json: "Gagal menghasilkan. Format respons dari API tidak benar.",
+                error_no_base_character: "Harap hasilkan karakter dasar terlebih dahulu sebelum membuat variasi adegan.",
+                error_generic_prefix: "Terjadi kesalahan: ",
+                results_narrative_title_unified: "Narasi Karakter",
+                card_title_main_prompt: "Prompt Utama",
+                card_title_variation_prefix: "Variasi ",
+                button_copy_prompt_card_text: "<i class=\"fas fa-copy mr-1\"></i>Salin Prompt",
+                copy_feedback_success: "Prompt berhasil disalin!", copy_feedback_fail: "Gagal menyalin!",
+                footer_text: "© 2025 Dodi Outright. Hak cipta dilindungi undang-undang.",
+                toast_switched_to_id: "Bahasa diubah ke Indonesia 🇮🇩",
+                lang_toggle_button: "🇬🇧 EN"
+            },
+            en: { // English translations
+                pageTitle: "Character Prompt Generator",
+                header_title: "Character Prompt Generator",
+                section_title_details: "Character Details (For Single Prompt)",
+                label_characterName: "Character Name", placeholder_characterName: "Example: Miko, Dewi", warning_characterName: "Character Name cannot be empty.",
+                label_age: "Age", placeholder_age: "Example: 8 years old / teenager / young adult", warning_age: "Age cannot be empty.",
+                label_gender: "Gender", option_gender_select: "Select Gender", option_gender_male: "Male", option_gender_female: "Female", warning_gender: "Gender cannot be empty.",
+                label_ethnicity: "Ethnicity", placeholder_ethnicity: "Example: Asian, Caucasian, African, Latin", warning_ethnicity: "Ethnicity cannot be empty.",
+                label_skinColor: "Skin Color", placeholder_skinColor: "Example: Tan, Pale, Dark, Brown", warning_skinColor: "Skin Color cannot be empty.",
+                label_hair: "Hair Color & Style", placeholder_hair: "Example: Long straight black, Short curly blonde", warning_hair: "Hair Color & Style cannot be empty.",
+                label_eye: "Eye Color & Shape", placeholder_eye: "Example: Brown almond, Blue round", warning_eye: "Eye Color & Shape cannot be empty.",
+                label_facialFeatures: "Facial Features", placeholder_facialFeatures: "Example: Dimples, Mole on cheek, Pointed nose", warning_facialFeatures: "Facial Features cannot be empty.",
+                label_accessories: "Face/Body Accessories", placeholder_accessories: "Example: Glasses, Earrings, Tattoo on arm", warning_accessories: "Accessories cannot be empty.",
+                label_outfit: "Main Outfit", placeholder_outfit: "Example: Black leather jacket, Summer dress", warning_outfit: "Main Outfit cannot be empty.",
+                label_fashionStyle: "General Fashion Style", placeholder_fashionStyle: "Example: Casual, Formal, Bohemian", warning_fashionStyle: "General Fashion Style cannot be empty.",
+                label_poseExpression: "Favorite Pose or Expression (for main prompt)", warning_poseExpression: "Favorite Pose or Expression cannot be empty.",
+                label_activityProps: "Key Activity or Props (for main prompt)", warning_activityProps: "Key Activity or Props cannot be empty.",
+                label_backgroundSetting: "General Background or Setting (for main prompt)", warning_backgroundSetting: "General Background or Setting cannot be empty.",
+                label_illustrationStyle: "Illustration Style", placeholder_illustrationStyle: "Example: Anime, Realistic, Cartoon, Fantasy", warning_illustrationStyle: "Illustration Style cannot be empty.",
+                correction_text_prefix: "Corrected to: ",
+                label_moodAtmosphere: "Mood or Atmosphere (for main prompt)", warning_moodAtmosphere: "Mood or Atmosphere cannot be empty.",
+                button_auto_generate_text: "<i class=\"fas fa-magic mr-2\"></i>Auto Generate",
+                button_generate_prompt_text: "<i class=\"fas fa-robot mr-2\"></i>Generate Main Prompt",
+                button_generate_multiple_scene_variations_text: "<i class=\"fas fa-images mr-2\"></i>Generate Multiple Scene Variations",
+                section_title_results: "Results (Single Prompt)",
+                section_title_scene_variations: "Scene Variations (For Main Prompt)",
+                loading_text: "Generating main prompt...",
+                loading_text_auto: "Generating automatically...",
+                loading_text_scene: "Generating scene variations...",
+                error_strong: "Error!",
+                error_fill_fields: "Please fill in all required fields.",
+                error_api_fail: "Failed to generate. Invalid API response.",
+                error_api_fail_status: "Failed to generate. Server error (Status: ",
+                error_api_fail_json: "Failed to generate. Incorrect API response format.",
+                error_no_base_character: "Please generate a base character first before creating scene variations.",
+                error_generic_prefix: "An error occurred: ",
+                results_narrative_title_unified: "Character Narrative",
+                card_title_main_prompt: "Main Prompt",
+                card_title_variation_prefix: "Variation ",
+                button_copy_prompt_card_text: "<i class=\"fas fa-copy mr-1\"></i>Copy Prompt",
+                copy_feedback_success: "Prompt copied successfully!", copy_feedback_fail: "Failed to copy!",
+                footer_text: "© 2025 Dodi Outright. All rights reserved.",
+                toast_switched_to_en: "Language switched to English 🇬🇧",
+                lang_toggle_button: "🇮🇩 ID"
+            }
+        };
+
+        // --- Global Stores ---
+        let generatedOutputsStore = { id: { narrative: null, prompts: [] }, en: { narrative: null, prompts: [] } };
+        let baseCharacterData = null; 
+        let variationCounter = 0;
+       
+        // --- Expanded Client-Side Data Arrays for Auto Generation ---
+        const randomData = { 
+            maleNames: [
+                // Indonesian Names (100+)
+                "Agus", "Budi", "Citra", "Dharma", "Eka", "Fajar", "Genta", "Hari", "Indra", "Jaka", 
+                "Karna", "Laksana", "Mega", "Nanda", "Omar", "Panca", "Qori", "Rendra", "Surya", "Tirta", 
+                "Umar", "Vian", "Wira", "Yoga", "Zaki", "Arief", "Bayu", "Chandra", "Dimas", "Erik", 
+                "Farhan", "Gilang", "Heru", "Irfan", "Jodi", "Krisna", "Lukman", "Maulana", "Naufal", "Oscar", 
+                "Pratama", "Rahmat", "Satria", "Tegar", "Usman", "Aditya", "Bagas", "Cakra", "Daffa", "Emir", 
+                "Fikri", "Galih", "Haikal", "Ilham", "Johan", "Kenzie", "Luthfi", "Mirza", "Nabil", "Osman", 
+                "Putra", "Rafi", "Syah", "Taufik", "Wildan", "Reza", "Rian", "Doni", "Andi", "Deni", 
+                "Rudi", "Sakti", "Toni", "Yuda", "Zain", "Akbar", "Bintang", "Cahyo", "Dika", "Elang", 
+                "Guntur", "Hadi", "Iqbal", "Jefri", "Kukuh", "Leo", "Miko", "Nico", "Pandu", "Rama", 
+                "Sandi", "Topan", "Vino", "Wahyu", "Yogi", "Zidan", "Arjuna", "Bima", "Dewa", "Endra",
+                "Firman", "Ghani", "Hendra", "Imam", "Jamal", "Khalid", "Lutfi", "Mahmud", "Nasrul", "Omar",
+                "Pram", "Qasim", "Rasyid", "Salman", "Tariq", "Ubaid", "Vikram", "Wayan", "Yasin", "Zulfikar",
+                // International Names (100+)
+                "Aaron", "Brian", "Charles", "David", "Ethan", "Flynn", "George", "Henry", "Ian", "Jack", 
+                "Kevin", "Liam", "Mason", "Noah", "Owen", "Peter", "Quinn", "Ryan", "Samuel", "Thomas", 
+                "Uriel", "Victor", "William", "Xavier", "Yates", "Zachary", "Alex", "Ben", "Chris", "Daniel", 
+                "Edward", "Frank", "Gary", "Howard", "Isaac", "James", "Ken", "Leo", "Mark", "Nathan", 
+                "Oliver", "Paul", "Robert", "Steven", "Tom", "Vincent", "Walter", "Yusuf", "Zayn", "Andre", 
+                "Bastian", "Christian", "Devon", "Ezra", "Felix", "Gabriel", "Harvey", "Ivan", "Jordan", "Kyle", 
+                "Lucas", "Miles", "Nico", "Orion", "Patrick", "Riley", "Sean", "Tristan", "Victor", "Wyatt", 
+                "Yancy", "Zion", "Adam", "Blake", "Caleb", "Dylan", "Elijah", "Finn", "Gavin", "Hunter", 
+                "Isaiah", "Jacob", "Kai", "Logan", "Matthew", "Nicholas", "Oscar", "Preston", "Ricardo", "Scott", 
+                "Tyler", "Vladimir", "Wesley", "Yahir", "Zander", "Arthur", "Bruce", "Connor", "Dominic", "Eric" 
+            ], 
+            femaleNames: [
+                // Indonesian Names (100+)
+                "Ayu", "Bulan", "Cahaya", "Dewi", "Elok", "Fitri", "Gita", "Hesti", "Intan", "Juwita", 
+                "Kartika", "Laras", "Maya", "Nirmala", "Olga", "Putri", "Qania", "Ratih", "Sari", "Tania", 
+                "Utari", "Vina", "Widya", "Yulia", "Zahra", "Amelia", "Bianca", "Clara", "Dinda", "Erica", 
+                "Farah", "Gina", "Helen", "Inez", "Jasmine", "Kyla", "Laura", "Monica", "Natasha", "Olive", 
+                "Patricia", "Raisa", "Sandra", "Tiara", "Vanessa", "Wendy", "Yasmine", "Zara", "Adelia", "Berlian", 
+                "Citra", "Dahlia", "Elysia", "Fanya", "Gayatri", "Hanna", "Indira", "Jelita", "Kirana", "Lestari", 
+                "Mawar", "Nadia", "Oktavia", "Puspita", "Rania", "Shinta", "Talita", "Wulan", "Anisa", "Bunga", 
+                "Dian", "Endah", "Fatimah", "Indah", "Kiki", "Lia", "Nia", "Rina", "Sinta", "Vivi", 
+                "Zizi", "Alya", "Bella", "Cici", "Dina", "Evi", "Febi", "Gadis", "Hilda", "Icha", 
+                "Jeni", "Kania", "Lala", "Mona", "Nina", "Poppy", "Rara", "Siska", "Tika", "Vera",
+                "Winda", "Yuni", "Zulaikha", "Asti", "Cinta", "Dita", "Echa", "Friska", "Ghea", "Hana",
+                "Ira", "Jessica", "Karina", "Lina", "Mira", "Novi", "Putri", "Rini", "Selly", "Tia",
+                // International Names (100+)
+                "Alice", "Bella", "Chloe", "Diana", "Ella", "Fiona", "Grace", "Hannah", "Isla", "Julia", 
+                "Katherine", "Lily", "Mia", "Nora", "Olivia", "Penelope", "Quincy", "Riley", "Sophia", "Tara", 
+                "Uma", "Violet", "Willow", "Xenia", "Yvonne", "Zoe", "Brianna", "Cassidy", "Delia", "Eva", 
+                "Freya", "Giselle", "Hazel", "Iris", "Jade", "Kira", "Luna", "Mila", "Naomi", "Ophelia", 
+                "Paige", "Quinn", "Ruby", "Stella", "Tessa", "Valerie", "Willa", "Yara", "Zelda", "Abigail", 
+                "Brooklyn", "Charlotte", "Daisy", "Eleanor", "Faith", "Gabriella", "Harper", "Isabelle", "Josephine", "Kylie", 
+                "Leah", "Madeline", "Natalie", "Octavia", "Piper", "Reagan", "Savannah", "Taylor", "Victoria", "Zoe", 
+                "Amber", "Brittany", "Crystal", "Destiny", "Evelyn", "Genesis", "Hailey", "Imogen", "Jocelyn", "Kayla", 
+                "Lauren", "Mackenzie", "Nicole", "Paige", "Rachel", "Skylar", "Tiffany", "Vanessa", "Whitney", "Yvonne"
+            ], 
+            ages: ["bayi (kurang dari 1 tahun)", "balita (1-3 tahun)", "anak prasekolah (4-5 tahun)", "anak kecil (6-7 tahun)", "anak sekolah dasar (8-10 tahun)", "pra-remaja (11-12 tahun)", "remaja awal (13-14 tahun)", "remaja pertengahan (15-16 tahun)", "remaja akhir (17-19 tahun)", "dewasa sangat muda (20-22 tahun)", "dewasa muda (23-25 tahun)", "dewasa (26-29 tahun)", "dewasa awal 30-an (30-34 tahun)", "dewasa pertengahan 30-an (35-39 tahun)", "dewasa matang awal 40-an (40-44 tahun)", "dewasa matang akhir 40-an (45-49 tahun)", "paruh baya awal 50-an (50-54 tahun)", "paruh baya akhir 50-an (55-59 tahun)", "pra-lansia (60-64 tahun)", "lansia muda (65-74 tahun)", "lansia (75-84 tahun)", "sangat tua (85-99 tahun)", "centenarian (100+ tahun)"], 
+            genders: ["Male", "Female"], 
+            ethnicities: [
+                "Jawa", "Sunda", "Melayu", "Batak (Toba, Karo, Mandailing, Simalungun, Pakpak)", "Minangkabau", "Dayak (Ngaju, Iban, Kenyah, Punan)", "Toraja", "Papua (Asmat, Dani, Lani)", "Bali Aga", "Sasak (Lombok)", "Madura", "Bugis (Sulawesi Selatan)", "Aceh", "Lampung", "Minahasa (Manado)", "Ambon (Maluku)", "Betawi (Jakarta)", "Nias", "Sumbawa", "Flores (Manggarai, Ngada)",
+                "Tionghoa (Han, Kanton, Hokkien)", "Korea", "Jepang", "Vietnam", "Thailand", "Filipina", "Myanmar", "Kamboja", "Laos", "Mongolia", "India (Utara, Selatan, Timur, Barat)", "Pakistan", "Bangladesh", "Nepal", "Sri Lanka", "Tibet", "Uighur", "Kazakh", "Uzbek", "Kirgiz",
+                "Inggris", "Irlandia", "Skotlandia", "Wales", "Prancis", "Jerman", "Italia", "Spanyol", "Portugis", "Belanda", "Belgia", "Swiss", "Austria", "Skandinavia (Norwegia, Swedia, Denmark, Finlandia, Islandia)", "Rusia", "Polandia", "Yunani", "Rumania", "Hungaria", "Ceko",
+                "Afrika Barat (Yoruba, Igbo, Akan, Hausa)", "Afrika Timur (Kikuyu, Maasai, Somali, Ethiopia)", "Afrika Tengah (Kongo, Luba)", "Afrika Selatan (Zulu, Xhosa, Sotho)", "Afrika Utara (Berber, Mesir)", "Afro-Amerika", "Afro-Karibia",
+                "Amerika Serikat (Kaukasia, Hispanik/Latinx)", "Kanada (Anglo, Franco)", "Meksiko (Mestizo)", "Brazil (Pardo, Branco)", "Argentina", "Pribumi Amerika Utara (Navajo, Cherokee, Sioux, Cree, Inuit)", "Pribumi Amerika Selatan (Quechua, Aymara, Mapuche)", "Australia (Anglo-Celtic, Aboriginal)", "Selandia Baru (Pakeha, Maori)", "Polinesia (Hawaii, Samoa, Tonga)", "Mikronesia", "Melanesia (Fiji)",
+                "Arab (Saudi, Emirati, Levantine)", "Persia (Iran)", "Turki", "Kurdi", "Yahudi (Ashkenazi, Sephardi, Mizrahi)", "Armenia", "Asiria", "Druze",
+                "Peranakan (Tionghoa-Indonesia/Melayu)", "Indo (Eropa-Indonesia)", "Kreol", "Multirasial", "Tidak Diketahui/Misterius"
+            ], 
+            skinColors: ["Sangat pucat dengan rona pink (alabaster)", "Putih gading dengan rona kuning (ivory)", "Krem terang netral", "Merah muda persik pucat", "Kuning langsat cerah (light golden beige)", "Sawo matang muda keemasan (light tan)", "Sawo matang netral (medium tan)", "Zaitun muda kehijauan (light olive)", "Zaitun medium hangat", "Cokelat muda karamel", "Cokelat keemasan gelap (deep golden brown)", "Cokelat kemerahan seperti tembaga (russet)", "Cokelat tua dingin (dark cool brown)", "Hitam manis dengan undertone biru/merah (rich dark brown)", "Ebony pekat dan halus", "Kulit pucat hampir transparan (vampiric)", "Kulit kebiruan atau kehijauan (fantasi/alien)", "Kulit abu-abu batu (fantasi/golem)", "Kulit metalik (perak/emas - fantasi/robot)", "Kulit berbintik seperti macan tutul (fantasi)"], 
+            hairColors: [
+                "Hitam legam berkilau seperti gagak", "Hitam kebiruan (blue-black)", "Hitam kecoklatan alami", "Cokelat sangat tua seperti espreso", "Cokelat tua pekat (dark chocolate)", "Cokelat medium kaya", "Cokelat kastanye hangat kemerahan", "Cokelat abu dingin (ash brown)", "Cokelat susu lembut", "Cokelat karamel manis", "Cokelat madu keemasan", "Cokelat muda pasir", "Cokelat kemerahan tembaga", "Mahoni gelap", "Cokelat dengan highlight pirang alami", "Cokelat dengan highlight karamel", "Ombre hitam ke cokelat", "Balayage cokelat berbagai nada", "Cokelat moka", "Cokelat truffle",
+                "Pirang gelap (dirty blonde)", "Pirang madu hangat", "Pirang keemasan cerah", "Pirang abu dingin (ash blonde)", "Pirang platinum sangat terang", "Pirang stroberi (strawberry blonde)", "Pirang krem (creamy blonde)", "Pirang pasir (sandy blonde)", "Pirang sampanye", "Pirang dengan akar gelap (rooted blonde)", "Highlight pirang pada dasar cokelat", "Pirang perak", "Pirang gandum", "Pirang mentega", "Pirang es",
+                "Merah jahe alami", "Merah tembaga metalik", "Merah anggur gelap (burgundy)", "Merah menyala seperti api", "Auburn (cokelat kemerahan pekat)", "Merah mahoni", "Merah bata", "Merah delima", "Merah oranye", "Merah muda rose gold",
+                "Putih salju murni", "Abu-abu baja prematur", "Silver metalik terang", "Biru tengah malam gelap", "Biru langit pastel", "Biru elektrik menyala", "Hijau hutan lumut", "Hijau zamrud berkilau", "Hijau mint pastel", "Ungu lavender lembut", "Ungu amethyst pekat", "Ungu magenta cerah", "Pink permen kapas", "Pink neon terang", "Oranye matahari terbenam", "Kuning kenari", "Turquoise tropis", "Pelangi (multicolored streaks)", "Two-tone (setengah hitam, setengah putih)", "Warna holografik/iridescent", "Teal gelap", "Maroon pekat", "Lavender berasap", "Peach lembut"
+            ], 
+            hairStyles: [
+                "lurus sangat panjang (sampai pinggang) tergerai bebas", "lurus panjang (sebahu) dengan layer lembut", "lurus model bob klasik di atas bahu", "lurus model lob (long bob) menyentuh bahu", "ikal bergelombang panjang alami dan longgar", "ikal sebahu bervolume dan bertekstur", "keriting afro besar dan mengembang penuh gaya", "keriting spiral pendek terdefinisi dan membal", "rambut sangat pendek model pixie cut feminin/maskulin", "model cepak (buzz cut) sangat pendek dan praktis", "rambut panjang disisir ke belakang (slicked back)", "rambut sebahu dengan belahan samping dalam", "rambut sebahu dengan belahan tengah rapi", "rambut panjang dengan poni rata tebal", "rambut panjang dengan poni samping menyapu", "rambut panjang dengan poni tirai (curtain bangs)", "rambut model shaggy layer acak-acakan modern", "rambut model mullet (pendek di depan, panjang di belakang)", "rambut model bowl cut retro", "rambut asimetris (satu sisi lebih panjang)",
+                "kuncir kuda tinggi ramping dan licin", "kuncir kuda rendah kasual", "kuncir dua imut di sisi kepala (pigtails)", "kepang satu tebal di punggung (single plait)", "kepang prancis elegan dari atas kepala", "kepang fishtail rumit dan artistik", "kepang mahkota (crown braid) melingkari kepala", "kepang Belanda (Dutch braid) menonjol", "sanggul balerina klasik di puncak kepala", "sanggul modern acak (messy bun) di tengkuk", "sanggul tinggi (top knot) stylish", "rambut diikat setengah (half-up half-down) dengan jepit", "rambut diikat setengah dengan kepang kecil", "beberapa kepang kecil menghiasi rambut tergerai (festival braids)", "rambut dikepang cornrow rapat ke kulit kepala", "rambut gimbal (dreadlocks) panjang terawat dan dihias", "rambut gimbal diikat menjadi sanggul besar", "kepang air terjun (waterfall braid)", "kepang samping (side braid) romantis", "rambut di-twist dan dijepit ke belakang",
+                "gaya undercut dengan rambut atas panjang ditata pompadour", "gaya undercut dengan rambut atas dikepang", "rambut keriting alami dibiarkan bebas (natural curls)", "rambut bergelombang pantai (beach waves)", "rambut super lurus dan berkilau (glass hair)", "rambut dengan ekstensi warna-warni", "rambut dengan highlight kontras", "rambut dengan balayage halus", "rambut dengan ujung dicelup warna cerah (dip-dye)", "rambut dikeriting permanen (perm)", "rambut diluruskan secara kimia (rebonding)", "rambut tipis dan halus", "rambut tebal dan kasar", "rambut kering dan bercabang", "rambut sehat dan berkilau", "rambut diikat pita besar", "rambut dengan hiasan bunga segar", "rambut ditata gelombang retro (finger waves)", "rambut model faux hawk", "rambut sasak tinggi (beehive)"
+            ], 
+            eyeColors: ["Cokelat sangat gelap (hampir hitam) misterius dan dalam", "Cokelat tua hangat dan ramah seperti kayu manis", "Cokelat medium bening seperti karamel cair", "Cokelat muda (amber) seperti madu di bawah sinar matahari", "Hazel (campuran cokelat, hijau, emas) yang berubah warna tergantung cahaya", "Biru langit cerah dan jernih seperti pagi musim semi", "Biru laut dalam dan intens seperti samudera", "Biru baja dingin dan tajam menusuk", "Biru kehijauan (teal) eksotis", "Hijau zamrud berkilau seperti permata", "Hijau zaitun lembut dan menenangkan", "Hijau hutan gelap dan misterius", "Abu-abu terang seperti perak cair", "Abu-abu gelap seperti badai yang mendekat", "Ungu violet magis (fantasi/kontak lensa/genetik langka)", "Merah menyala supernatural (fantasi/kontak lensa/kondisi medis)", "Heterochromia sentral (cincin warna berbeda di sekitar pupil)", "Heterochromia sektoral (sebagian iris berwarna beda)", "Heterochromia komplet (satu mata biru, satu mata cokelat)", "Emas murni (fantasi/supernatural)", "Perak cair (fantasi)", "Oranye menyala (fantasi)", "Pink lembut (fantasi)"], 
+            eyeShapes: ["Bentuk almond klasik dan seimbang, sedikit menyipit di ujung luar", "Bulat besar dan ekspresif seperti mata boneka, tampak polos", "Sipit (monolid) khas Asia Timur, tanpa lipatan kelopak mata atas", "Sipit dengan lipatan (double eyelid) lembut dan alami", "Menurun (downturned/sad eyes) memberi kesan sendu atau lelah", "Naik (upturned/cat eyes) memberi kesan ceria, menggoda, atau licik", "Mata dalam (deep-set) dan intens, tersembunyi di bawah tulang alis", "Mata menonjol (prominent) dan penuh perhatian, tampak besar", "Mata phoenix (panjang dan sedikit naik di ujung luar, elegan)", "Mata sanpaku (bagian putih sklera terlihat di bawah atau atas iris)", "Mata berkerudung (hooded eyes) dengan lipatan kulit menutupi kelopak mata", "Mata berjarak dekat (close-set)", "Mata berjarak jauh (wide-set)", "Mata rubah (fox eyes) yang memanjang dan naik tajam", "Mata sayu (doe eyes) yang lembut dan besar"], 
+            facialFeatures: [
+                "Lesung pipi di satu sisi saat tersenyum", "Lesung pipi di kedua sisi, sangat manis", "Tahi lalat khas di atas bibir (ala Marilyn Monroe)", "Tahi lalat kecil di pipi kiri/kanan", "Tahi lalat strategis di dahi atau dagu", "Hidung mancung lurus dan proporsional (Roman nose)", "Hidung pesek kecil dan menggemaskan (button nose)", "Hidung bengkok (mungkin bekas patah, menambah karakter)", "Hidung elang (aquiline nose) dengan pangkal menonjol", "Hidung lebar dengan lubang hidung besar", "Pipi chubby menggemaskan dan awet muda", "Pipi tirus dengan tulang pipi tinggi dan menonjol", "Banyak bintik (freckles) menyebar di hidung dan pipi", "Sedikit bintik (freckles) di bawah mata", "Alis tebal alami dan sedikit berantakan memberi kesan kuat", "Alis tipis melengkung sempurna dan rapi", "Alis lurus dan tegas", "Alis dengan bekas luka kecil yang memotongnya", "Mata dengan bulu mata sangat panjang dan lentik alami", "Mata dengan kantung mata tipis karena kurang tidur", "Lingkaran hitam samar di bawah mata", "Kerutan halus di sudut mata saat tersenyum (crow's feet)", "Satu alis sedikit lebih tinggi dari yang lain", "Alis menyatu tipis di tengah (unibrow)",
+                "Bibir tipis dan tegas", "Bibir penuh dan sensual", "Bibir berbentuk hati (cupid's bow) yang jelas", "Bibir bawah lebih tebal dari atas", "Garis senyum yang dalam", "Dagu terbelah (cleft chin)", "Dagu runcing dan elegan", "Dagu persegi dan kuat", "Dagu bulat lembut", "Garis rahang tegas dan menonjol", "Garis rahang lembut dan tidak terlalu kentara", "Gigi kelinci (buck teeth) yang imut", "Celah di antara gigi depan (diastema)", "Telinga sedikit caplang (elfin-like atau menonjol)", "Telinga kecil dan menempel di kepala", "Bekas tindikan di beberapa tempat di telinga",
+                "Dahi lebar dan tinggi, menunjukkan kecerdasan", "Dahi sempit dan rendah", "Bekas luka diagonal tipis di pipi kiri/kanan", "Bekas luka kecil di atas alis kiri/kanan", "Bekas luka bakar samar di leher", "Tanda lahir unik berbentuk tertentu di wajah/leher", "Kulit wajah sangat mulus tanpa cela", "Kulit wajah dengan beberapa bekas jerawat samar",
+                "Wajah simetris sempurna", "Wajah sedikit asimetris yang menarik", "Ekspresi wajah yang biasanya ramah dan terbuka", "Ekspresi wajah yang biasanya serius dan tertutup", "Wajah yang mudah memerah saat malu atau marah", "Struktur tulang wajah yang tegas", "Fitur wajah androgini", "Wajah berbentuk oval", "Wajah berbentuk hati", "Wajah berbentuk persegi", "Wajah berbentuk bulat", "Wajah berbentuk panjang", "Wajah berbentuk berlian"
+            ], 
+            accessories: [
+                "Kacamata baca frame tebal warna hitam/cokelat", "Kacamata hitam aviator klasik lensa gelap", "Kacamata hitam wayfarer retro", "Kacamata bulat ala John Lennon", "Kacamata olahraga melengkung", "Topi baseball dengan logo tim/polos", "Topi beanie rajut warna gelap/cerah", "Topi fedora klasik warna abu-abu/cokelat", "Topi baret ala seniman Prancis", "Topi kupluk (ushanka) untuk cuaca dingin", "Mahkota bunga liar sederhana (bohemian)", "Mahkota tiara permata (fantasi/royal)", "Ikat kepala kain bermotif etnik/bunga", "Bandana dilipat di dahi/leher", "Headphone besar over-ear peredam bising", "Earbud nirkabel kecil dan ringkas", "Hiasan rambut jepit kupu-kupu/bunga", "Tusuk konde berukir (tradisional)", "Kacamata goggle steampunk", "Visor futuristik",
+                "Kalung liontin kristal berwarna (biru/hijau/merah)", "Kalung choker kulit dengan bandul metal runcing", "Kalung rantai perak tipis dengan liontin bulan sabit", "Kalung mutiara klasik seuntai", "Kalung taring binatang (tribal/primitif)", "Syal sutra motif paisley mewah", "Syal rajut tebal untuk musim dingin warna solid", "Syal kashmir lembut", "Dasi kupu-kupu formal", "Dasi panjang sutra", "Scarf kotak-kotak (plaid)", "Kalung dog tag militer", "Choker beludru dengan liontin cameo", "Kalung rosario", "Pendant kunci antik",
+                "Anting mutiara simpel dan elegan", "Anting hoop besar emas/perak", "Anting tindik industrial di telinga atas (barbell)", "Anting bulu panjang etnik menjuntai", "Anting stud berlian kecil berkilau", "Anting giwang batu permata (ruby/sapphire)", "Anting ear cuff melingkari daun telinga", "Anting menjuntai model chandelier", "Anting kayu ukiran tangan", "Anting bentuk geometris modern", "Anting salib kecil", "Anting magnet (tanpa tindik)", "Beberapa anting kecil di satu telinga", "Anting tengkorak kecil", "Anting spiral tribal",
+                "Gelang perak berukir motif naga/ular", "Gelang manik-manik kayu warna-warni", "Gelang kulit anyam tebal dengan gesper metal", "Gelang rantai emas/perak tebal", "Gelang charm dengan banyak bandul kecil", "Jam tangan analog klasik tali kulit cokelat/hitam", "Jam tangan digital sporty tahan air warna cerah", "Smartwatch dengan layar sentuh modern", "Cincin batu permata besar (ruby, safir, zamrud) di jari manis", "Cincin polos emas/perak di jari manis dan kelingking", "Cincin tengkorak perak di jari telunjuk", "Cincin meterai keluarga (signet ring)", "Beberapa cincin tipis ditumpuk di beberapa jari", "Sarung tangan kulit tanpa jari (fingerless gloves)", "Sarung tangan rajut hangat", "Sarung tangan satin panjang (formal)", "Manset kemeja perak/emas", "Gelang persahabatan dari benang", "Arloji saku antik dengan rantai", "Gelang kaki perak dengan lonceng kecil", 
+                "Tato kecil simbolik di pergelangan tangan dalam", "Tato tribal melingkar di lengan atas", "Tato tulisan kaligrafi di lengan bawah", "Gelang fitness tracker", "Kuku dicat warna gelap/terang/nail art",
+                "Tas ransel kulit vintage dengan banyak gesper", "Tas selempang modern bahan kanvas tahan air", "Tas pinggang (fanny pack) praktis untuk barang kecil", "Tas tote bag besar dengan tulisan/gambar unik", "Koper tua penuh stiker perjalanan", "Sabuk kulit lebar dengan gesper besar berbentuk unik", "Sabuk kain obi Jepang", "Suspender kulit/kain", "Bros unik berbentuk serangga/bunga di kerah/dada", "Pin enamel koleksi di jaket/tas", "Tato besar di punggung/dada", "Piercing hidung simpel (stud/ring kecil)", "Piercing bibir (labret/snake bites/medusa)", "Piercing alis", "Piercing septum", 
+                "Tongkat jalan kayu berukir", "Payung klasik gagang kayu", "Buku catatan kulit usang", "Peta kuno yang digulung", "Kompas antik", "Botol minum metalik tergores", "Kamera DSLR tergantung di leher", "Alat musik kecil (harmonika/ukulele) terselip di tas", "Dompet rantai", "Lencana profesi/pangkat", "Masker wajah kain bermotif", "Kipas tangan lipat elegan", "Sarung pedang berhias", "Kantong herbal diikat di pinggang", "Lentera tua"
+            ], 
+        };
+
+        const characterArchetypes = [ 
+            { fashionStyle: "Fantasi Epik Ksatria Cahaya", outfit: "Baju zirah perak berkilau ditempa malaikat dengan jubah biru langit bersulam benang emas simbol matahari", poseExpression: "Berdiri gagah di puncak tebing curam, memandang cakrawala fajar dengan tatapan penuh harapan dan tekad baja, pedang suci bercahaya tersarung di pinggang", activityProps: "Melindungi artefak kuno berkekuatan kosmik dari cengkeraman tiran kegelapan, memimpin pasukan aliansi ras-ras merdeka", backgroundSetting: "Kastil kristal melayang di antara awan-awan senja berwarna jingga dan ungu, dikelilingi air terjun pelangi yang mengalir ke atas", illustrationStyle: "Lukisan digital hiper-realistis dengan pencahayaan dramatis ilahi, partikel cahaya beterbangan", moodAtmosphere: "Mulia, agung, penuh keajaiban, dan harapan yang tak tergoyahkan" },
+            { fashionStyle: "Cyberpunk Dystopian Netrunner", outfit: "Jaket kulit hitam usang penuh patch pemberontak dengan implan serat optik neon biru di lengan dan leher, celana kargo multi-saku sobek, dan visor tempur holografik menutupi mata yang bersinar", poseExpression: "Bersandar di dinding grafiti digital di gang sempit yang basah oleh hujan asam dan dipenuhi kabel menjuntai, ekspresi sinis sambil data-jack terhubung ke port di pelipisnya", activityProps: "Meretas mainframe korporasi raksasa penguasa kota, menyelundupkan data kesadaran digital terlarang untuk kaum pemberontak di dunia maya", backgroundSetting: "Kota metropolitan Neo-Kyoto malam hari yang dipenuhi gedung pencakar langit menjulang menembus polusi cahaya, iklan hologram geisha raksasa, dan kendaraan terbang berdesing", illustrationStyle: "Seni konsep cyberpunk detail gritty dengan warna neon kontras (biru, pink, kuning) dan refleksi basah di mana-mana", moodAtmosphere: "Gelap, tegang, penuh intrik teknologi tinggi, pemberontakan putus asa, dan kesepian digital" },
+            { fashionStyle: "Kasual Urban Street Artist", outfit: "Hoodie oversized warna pastel dengan cipratan cat, ripped jeans belel, sneaker edisi terbatas penuh coretan, dan tas tote bag kanvas berisi kaleng cat semprot dan buku sketsa", poseExpression: "Duduk di bangku taman kota sambil tersenyum lebar mendengarkan musik indie lewat earbud nirkabel, satu kaki diangkat ke bangku, sedang menyelesaikan mural abstrak di dinding belakangnya", activityProps: "Menjelajahi sudut-sudut kota yang terlupakan untuk mencari 'kanvas', meninggalkan jejak seni jalanan penuh makna, nongkrong di kafe independen dengan komunitas seniman", backgroundSetting: "Distrik seni urban yang kumuh namun penuh kehidupan dengan mural berwarna-warni menutupi setiap permukaan, kafe dengan jendela besar menampilkan karya lokal, dan orang-orang beragam berlalu lalang", illustrationStyle: "Ilustrasi vektor datar modern dengan palet warna cerah dan ceria, garis tegas dinamis, dan elemen grafiti", moodAtmosphere: "Santai, kreatif tanpa batas, ceria menantang, dan dinamis penuh energi muda" },
+            { fashionStyle: "Bohemian Spiritual Wanderer", outfit: "Gaun maxi longgar berlapis-lapis bermotif etnik dari berbagai budaya, rompi rajut tangan dari benang alami, sandal kulit buatan tangan, dan tumpukan gelang perak serta kalung batu alam (turquoise, amethyst, moonstone)", poseExpression: "Menari bebas tanpa alas kaki di padang bunga liar saat matahari terbenam keemasan, rambut panjang tergerai ditiup angin sepoi-sepoi, mata terpejam menikmati koneksi dengan alam semesta", activityProps: "Berpetualang tanpa tujuan pasti mengikuti intuisi, membaca tarot dan garis tangan untuk orang asing di pasar lokal, mengumpulkan herbal langka dan kristal berenergi di hutan suci", backgroundSetting: "Karavan tua yang dicat warna-warni dengan simbol-simbol mistis, terparkir di tepi hutan pinus kuno, api unggun kecil berderak mengirimkan asap wangi ke langit berbintang", illustrationStyle: "Lukisan cat air impresionistik dengan sapuan lembut dan warna-warna hangat earthy (cokelat, hijau zaitun, terakota, kuning oker)", moodAtmosphere: "Bebas, spiritual mendalam, damai tenteram, dan menyatu secara harmonis dengan alam semesta" },
+            { fashionStyle: "Gothic Victorian Occultist", outfit: "Gaun beludru hitam panjang dengan detail renda laba-laba, korset kulit ketat, sarung tangan jaring sutra, dan liontin perak berbentuk kunci antik atau simbol alkimia", poseExpression: "Duduk di kursi berlengan kayu berukir di perpustakaan pribadi yang remang dan berdebu, satu tangan kurus memegang buku tua berjilid kulit dengan simbol aneh, tatapan serius dan penuh pemikiran menembus kegelapan", activityProps: "Meneliti manuskrip kuno tentang ilmu gaib dan demonologi, melakukan ritual pemanggilan di ruang bawah tanah rahasia, menulis puisi melankolis tentang kematian dan keabadian di malam hari diterangi cahaya lilin", backgroundSetting: "Perpustakaan besar bergaya gotik dengan rak buku menjulang tinggi dipenuhi buku-buku terlarang, jendela kaca patri besar menggambarkan adegan mengerikan, dan hanya diterangi oleh cahaya lilin berkelip serta perapian yang hampir padam", illustrationStyle: "Lukisan minyak digital dengan gaya klasik gelap ala Brom atau Victoria Frances, chiaroscuro menonjol, detail rumit pada pakaian dan lingkungan", moodAtmosphere: "Suram, intelektual misterius, melankolis mendalam, sedikit angker, dan penuh pengetahuan terlarang" },
+            { fashionStyle: "Space Opera Smuggler Pilot", outfit: "Jaket kulit penerbang usang dengan banyak saku tersembunyi, kaos oblong pudar, celana kargo praktis, sepatu bot kerja berat, dan sabuk utilitas berisi berbagai gadget serta pistol blaster kesayangan", poseExpression: "Berdiri di pintu kargo kapal luar angkasa bobroknya, menyeringai licik sambil menyilangkan tangan di dada, latar belakang planet gurun eksotis dengan dua bulan", activityProps: "Menyelundupkan barang ilegal melintasi sektor luar angkasa yang dijaga ketat, menghindari patroli Galactic Empire, bernegosiasi dengan kontak alien yang tidak bisa dipercaya di bar kumuh", backgroundSetting: "Kokpit kapal luar angkasa yang penuh dengan tombol dan layar berkedip, atau hanggar tersembunyi di asteroid, atau bar antariksa yang ramai dan berbahaya", illustrationStyle: "Seni fiksi ilmiah gritty ala Star Wars atau Firefly, dengan desain pesawat yang fungsional namun usang, dan karakter yang terlihat tangguh", moodAtmosphere: "Petualang licik, sedikit berbahaya, penuh humor sarkastik, dan selalu selangkah di depan hukum" },
+            { fashionStyle: "Wild West Gunslinger", outfit: "Kemeja katun pudar, rompi kulit dengan bekas peluru, celana denim usang, sepatu bot koboi berdebu, topi Stetson lebar, dan sabuk pistol ganda dengan revolver berukir", poseExpression: "Berdiri di tengah jalan utama kota hantu saat matahari terik, tangan siap di atas gagang pistol, mata menyipit mengamati bayangan yang mendekat", activityProps: "Terlibat dalam duel tengah hari, melindungi kota kecil dari bandit kejam, menjadi pemburu bayaran yang ditakuti, mencari penebusan atas masa lalu kelam", backgroundSetting: "Kota perbatasan Wild West yang berdebu dengan saloon, kantor sheriff, dan tiang gantungan, atau padang gurun Arizona yang luas dengan kaktus saguaro", illustrationStyle: "Realistis atau semi-realistis dengan gaya lukisan Barat klasik, warna sepia atau palet warna gurun", moodAtmosphere: "Tegang, berbahaya, penuh aksi koboi, kesepian, dan menjunjung tinggi kode kehormatan pribadi" },
+            { fashionStyle: "Urban Fantasy Detective", outfit: "Jas hujan panjang warna gelap, kemeja kusut, dasi longgar, sepatu bot praktis, dan mungkin membawa artefak magis kecil atau pistol dengan peluru perak", poseExpression: "Berdiri di bawah lampu jalan yang berkedip di gang belakang yang gelap, mengamati simbol aneh yang tergambar di dinding dengan darah, ekspresi berpikir keras", activityProps: "Menginvestigasi kejahatan supernatural yang tidak bisa ditangani polisi biasa, berurusan dengan vampir, werewolf, dan penyihir gelap, melindungi dunia manusia dari ancaman gaib", backgroundSetting: "Kota modern di malam hari dengan sisi tersembunyi yang magis, seperti klub malam vampir, toko barang antik terkutuk, atau portal ke dunia lain di stasiun kereta bawah tanah", illustrationStyle: "Gaya noir modern dengan elemen fantasi gelap, pencahayaan kontras, dan atmosfer misterius", moodAtmosphere: "Kelam, penuh teka-teki, sedikit sinis, dan selalu ada bahaya magis mengintai" },
+            { fashionStyle: "Prehistoric Tribal Hunter", outfit: "Pakaian sederhana dari kulit binatang yang dijahit kasar, mungkin dihiasi tulang atau gigi binatang, tanpa alas kaki atau dengan balutan kulit sederhana", poseExpression: "Berjongkok di semak-semak, tombak kayu runcing di tangan, mata fokus mengamati kawanan mammoth di kejauhan, tubuh dicat dengan lumpur untuk kamuflase", activityProps: "Berburu binatang besar untuk makanan dan pakaian suku, melindungi gua dari serangan binatang buas atau suku lain, melukis di dinding gua menceritakan kisah perburuan", backgroundSetting: "Sabana zaman es dengan rumput tinggi dan pegunungan es di kejauhan, atau hutan lebat purba dengan pakis raksasa, atau di dalam gua yang hangat dengan api unggun", illustrationStyle: "Realistis prasejarah dengan detail anatomi manusia purba dan lingkungan alam liar yang keras", moodAtmosphere: "Primitif, bertahan hidup, penuh bahaya alam, dan kuatnya ikatan komunal" },
+            { fashionStyle: "Dieselpunk Aviator Ace", outfit: "Jaket kulit penerbang berlapis bulu domba, syal sutra putih, celana baggy, sepatu bot tinggi, dan kacamata penerbang besar di atas topi kulit", poseExpression: "Menyeringai percaya diri di kokpit pesawat tempur biplan bermesin diesel yang berasap, satu tangan memberi hormat, langit penuh asap pertempuran di belakang", activityProps: "Bertempur dalam pertempuran udara epik melawan zeppelin raksasa atau skuadron musuh, melakukan misi pengintaian berbahaya di wilayah musuh, menjadi pahlawan perang udara", backgroundSetting: "Lapangan terbang militer era 1930-an atau 1940-an alternatif, langit dipenuhi pesawat tempur dan ledakan, atau di dalam hanggar yang penuh dengan mesin dan mekanik", illustrationStyle: "Gaya retro-futuristik dieselpunk dengan desain mesin yang besar dan kuat, nuansa sepia atau warna perang yang pudar", moodAtmosphere: "Berani, patriotik, penuh aksi udara, dan nostalgia era mesin" },
+            { fashionStyle: "Solarpunk Ecologist", outfit: "Pakaian fungsional dari bahan daur ulang berwarna cerah (hijau, kuning, biru langit), panel surya kecil terintegrasi di bahu atau tas, sepatu bot berjalan yang nyaman, dan topi lebar", poseExpression: "Berdiri di atas gedung pencakar langit yang diselimuti tanaman rambat, tersenyum sambil memegang tablet berisi data kualitas udara, drone kecil pengumpul sampel terbang di dekatnya", activityProps: "Merancang kota hijau berkelanjutan, mengembangkan teknologi energi terbarukan, memulihkan ekosistem yang rusak, mendidik masyarakat tentang simbiosis dengan alam", backgroundSetting: "Kota utopia solarpunk dengan arsitektur biomimetik, taman vertikal, transportasi publik bertenaga surya, dan masyarakat hidup harmonis dengan alam", illustrationStyle: "Cerah, optimis, dan penuh harapan dengan detail teknologi hijau dan alam yang subur terintegrasi, gaya seni yang bersih dan modern", moodAtmosphere: "Inovatif, optimis, harmonis, dan peduli lingkungan" },
+            { fashionStyle: "Fairy Tale Princess (Rebellious)", outfit: "Gaun pesta kerajaan yang sedikit sobek dan dimodifikasi dengan elemen praktis seperti saku tersembunyi atau ujung rok yang dipotong agar mudah bergerak, tiara sedikit miring", poseExpression: "Menyelinap keluar dari jendela menara kastil menggunakan tali dari seprai, senyum nakal di wajah, siap untuk petualangan", activityProps: "Kabur dari perjodohan paksa, berteman dengan naga atau makhluk hutan ajaib, mencari jati diri di luar tembok istana, belajar ilmu pedang secara diam-diam", backgroundSetting: "Kastil megah di malam hari dengan penjaga berpatroli, atau hutan terlarang yang gelap dan misterius di dekatnya", illustrationStyle: "Gaya ilustrasi buku dongeng klasik dengan sentuhan modern dan dinamis, warna-warna kaya", moodAtmosphere: "Berani, mandiri, penuh petualangan, dan sedikit memberontak" },
+            { fashionStyle: "Ancient Egyptian Priest/Priestess", outfit: "Pakaian linen putih tipis, kerah usekh emas berhias batu mulia (lapis lazuli, carnelian), hiasan kepala nemes atau wig berhias, sandal papirus", poseExpression: "Berdiri di depan altar kuil yang dipenuhi hieroglif, tangan terangkat dalam doa atau ritual, tatapan khusyuk ke arah patung dewa/dewi", activityProps: "Memimpin upacara keagamaan untuk Ra atau Isis, membaca gulungan papirus berisi mantra kuno, menafsirkan mimpi firaun, menjaga keseimbangan Ma'at", backgroundSetting: "Kuil Karnak atau Luxor yang megah dengan pilar-pilar raksasa berukir, Sungai Nil yang mengalir tenang di bawah matahari terik, atau ruang makam firaun yang gelap", illustrationStyle: "Realistis dengan detail akurat pada kostum, arsitektur, dan simbolisme Mesir Kuno, pencahayaan dramatis", moodAtmosphere: "Sakral, misterius, penuh kekuatan spiritual, dan agung" },
+            { fashionStyle: "Kung Fu Master Monk", outfit: "Jubah shaolin oranye atau abu-abu sederhana, selempang kain, celana longgar, dan tanpa alas kaki atau sepatu kain tipis", poseExpression: "Berdiri dalam posisi kuda-kuda yang kokoh di puncak gunung berkabut, mata terpejam dalam meditasi, energi chi terlihat samar mengelilinginya", activityProps: "Melatih murid-murid muda di kuil terpencil, bermeditasi berhari-hari untuk mencapai pencerahan, menggunakan ilmu bela diri untuk melindungi yang lemah tanpa membunuh", backgroundSetting: "Kuil kuno di pegunungan Tiongkok yang diselimuti awan, halaman latihan dengan patung naga batu, atau hutan bambu yang tenang", illustrationStyle: "Gaya lukisan tinta Tiongkok tradisional dicampur dengan realisme dinamis untuk adegan bela diri", moodAtmosphere: "Tenang, bijaksana, penuh disiplin spiritual, dan kekuatan batin yang luar biasa" },
+            { fashionStyle: "Viking Shieldmaiden", outfit: "Tunik wol kasar, celana kulit, baju zirah lamellar atau chainmail ringan, helm berhias (mungkin tanpa tanduk), perisai bulat di punggung, dan kapak atau pedang di pinggang", poseExpression: "Berteriak perang di atas kapal panjang Viking yang menerjang ombak badai, kapak terangkat tinggi, tatapan ganas dan tak kenal takut", activityProps: "Bertempur di garis depan bersama para pria, menjarah biara di pesisir Inggris, menjelajahi lautan utara yang dingin dan berbahaya, melindungi klannya", backgroundSetting: "Desa Viking di tepi fjord Norwegia dengan rumah-rumah kayu panjang, atau medan perang yang bersalju dan berdarah", illustrationStyle: "Realistis historis dengan detail pada pakaian dan peralatan Viking, atmosfer dingin dan keras", moodAtmosphere: "Ganas, berani, setia pada klan, dan penuh semangat juang Viking" },
+            { fashionStyle: "Pirate Swashbuckler", outfit: "Kemeja putih longgar, rompi kulit usang, celana panjang bergaris, ikat pinggang lebar dengan gesper besar, dan bandana merah", poseExpression: "Berdiri di dek kapal dengan satu kaki di atas meriam, pedang terhunus ke langit, senyum menyeringai", activityProps: "Memimpin penyerbuan kapal dagang, mencari harta karun terpendam, berpesta pora di kedai bajak laut", backgroundSetting: "Pulau tropis terpencil dengan pantai berpasir putih, kapal bajak laut berlabuh di teluk tersembunyi", illustrationStyle: "Ilustrasi petualangan klasik dengan warna-warna cerah dan detail maritim", moodAtmosphere: "Berani, bebas, penuh petualangan, dan sedikit liar" },
+            { fashionStyle: "Forest Elf Ranger", outfit: "Tunik kulit berwarna hijau dan cokelat, jubah bertudung, celana ketat, dan sepatu bot lembut tanpa suara", poseExpression: "Berjongkok di dahan pohon, busur dan anak panah siap, mata tajam mengamati hutan", activityProps: "Melacak jejak makhluk langka, melindungi perbatasan hutan dari penyusup, memandu pelancong yang tersesat", backgroundSetting: "Hutan kuno yang diselimuti cahaya matahari temaram, pohon-pohon raksasa, dan sungai jernih", illustrationStyle: "Seni fantasi tinggi dengan detail alam yang indah dan pencahayaan magis", moodAtmosphere: "Tenang, waspada, misterius, dan menyatu dengan alam" },
+            { fashionStyle: "Mad Scientist", outfit: "Jas lab putih kotor, kacamata pelindung tebal, rambut acak-acakan, dan sarung tangan karet", poseExpression: "Tertawa manik sambil memegang tabung reaksi berisi cairan berwarna aneh yang berasap", activityProps: "Melakukan eksperimen berbahaya di laboratorium rahasia, menciptakan monster atau penemuan gila, mencoba menguasai dunia", backgroundSetting: "Laboratorium bawah tanah yang penuh dengan peralatan aneh, kabel berseliweran, dan tabung-tabung berisi spesimen", illustrationStyle: "Gaya kartun horor komedi dengan ekspresi berlebihan dan warna-warna mencolok", moodAtmosphere: "Gila, eksentrik, berbahaya, dan sedikit lucu" },
+            { fashionStyle: "Intergalactic Bounty Hunter", outfit: "Armor tempur ringan dengan berbagai teknologi, helm tertutup dengan HUD, dan senapan blaster di punggung", poseExpression: "Berjalan keluar dari pesawat luar angkasa yang berasap di planet asing, memindai lingkungan dengan visor helm", activityProps: "Memburu buronan paling dicari di galaksi, menegosiasikan kontrak dengan klien misterius, bertahan hidup di planet berbahaya", backgroundSetting: "Planet gurun dengan dua matahari, bar luar angkasa kumuh yang dipenuhi alien, atau stasiun luar angkasa yang ramai", illustrationStyle: "Fiksi ilmiah gritty dengan desain karakter yang tangguh dan lingkungan alien yang detail", moodAtmosphere: "Tegas, profesional, berbahaya, dan penuh aksi" },
+            { fashionStyle: "Time Traveler Historian", outfit: "Pakaian era Victoria yang rapi dengan sentuhan modern seperti jam tangan digital tersembunyi", poseExpression: "Mengamati artefak kuno di museum dengan kaca pembesar, ekspresi penuh rasa ingin tahu dan keheranan", activityProps: "Melompat antar periode waktu untuk meneliti peristiwa sejarah secara langsung, mencoba tidak mengubah masa lalu, mengumpulkan data untuk arsip masa depan", backgroundSetting: "Perpustakaan Alexandria sebelum terbakar, Colosseum Roma saat pertarungan gladiator, atau jalanan London era Victoria", illustrationStyle: "Realistis dengan akurasi sejarah pada detail kostum dan arsitektur, pencahayaan lembut", moodAtmosphere: "Intelektual, penasaran, hati-hati, dan penuh petualangan waktu" }
+        ]; 
+
+        const sceneOptions = { 
+            id: {
+                poses: ["berpose heroik", "duduk di atas batu", "berlari dengan gembira", "tidur di bawah pohon", "menatap ke kejauhan", "bersandar santai", "melompat gembira", "merenung dalam", "berbisik pada hewan kecil", "menunjuk ke langit", "berlutut berdoa", "memegang artefak bercahaya", "tertawa lepas", "menangis dalam diam", "berjalan di tengah hujan"],
+                actions: ["membaca buku kuno bersampul kulit", "berbicara dengan naga bijaksana", "makan malam bersama teman-teman di kedai ramai", "bermain kejar-kejaran dengan makhluk ajaib bersayap", "menjelajahi reruntuhan kuil kuno yang terlupakan", "membuat ramuan sihir berwarna pelangi", "berlatih pedang melawan bayangan sendiri", "melukis pemandangan galaksi nebula", "memainkan alat musik harpa yang senarnya terbuat dari cahaya bulan", "menemukan peta harta karun tersembunyi di balik air terjun"],
+                settings: ["di depan kastil es megah di puncak gunung tertinggi", "di dalam hutan ajaib berkabut dengan pohon-pohon berbicara", "di bawah langit malam penuh aurora borealis", "di tepi danau kristal bercahaya dari dalam", "di pasar abad pertengahan yang ramai dengan pedagang eksotis", "di puncak gunung berapi aktif yang mengeluarkan lahar pijar", "di dalam gua kristal raksasa yang memantulkan cahaya", "di perpustakaan terlarang yang dijaga golem batu", "di atas kapal terbang bertenaga uap melintasi awan", "di taman rahasia yang hanya mekar setahun sekali di bawah bulan purnama"],
+                moods: ["damai dan magis menenangkan jiwa", "tegang dan misterius penuh firasat buruk", "ceria dan penuh petualangan tak terduga", "tenang dan reflektif merenungi takdir", "epik dan agung membangkitkan semangat", "gelap dan firasat mencekam hati", "aneh dan menyenangkan seperti mimpi", "nostalgia dan lembut mengenang masa lalu", "penuh harapan dan inspiratif untuk masa depan", "sunyi dan kesepian di tengah keramaian"]
+            },
+            en: { 
+                poses: ["posing heroically", "sitting on a rock", "running joyfully", "sleeping under a tree", "gazing into the distance", "leaning casually", "jumping with excitement", "deep in thought", "whispering to a small animal", "pointing towards the sky", "kneeling in prayer", "holding a glowing artifact", "laughing freely", "crying silently", "walking in the rain"],
+                actions: ["reading an ancient leather-bound book", "talking to a wise dragon", "eating dinner with friends in a bustling tavern", "playing chase with a winged magical creature", "exploring forgotten ancient temple ruins", "brewing a rainbow-colored magic potion", "practicing swordsmanship against their own shadow", "painting a landscape of a swirling nebula galaxy", "playing a harp whose strings are made of moonlight", "discovering a hidden treasure map behind a waterfall"],
+                settings: ["in front of a majestic ice castle on the highest mountain peak", "inside an enchanted misty forest with talking trees", "under a night sky full of aurora borealis", "at the edge of a crystal lake glowing from within", "in a bustling medieval market with exotic merchants", "on the summit of an active volcano spewing molten lava", "inside a giant crystal cave reflecting myriad lights", "in a forbidden library guarded by stone golems", "aboard a steam-powered airship cruising through the clouds", "in a secret garden that blooms only once a year under the full moon"],
+                moods: ["peaceful and magical, soothing the soul", "tense and mysterious, full of foreboding", "cheerful and adventurous, full of unexpected turns", "calm and reflective, contemplating destiny", "epic and grand, stirring the spirit", "dark and foreboding, gripping the heart", "whimsical and delightful, like a dream", "nostalgic and gentle, reminiscing the past", "hopeful and inspiring for the future", "silent and lonely in the midst of a crowd"]
+            }
+        };
+        const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+
+        // --- DOM Elements ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+        const languageToggleBtn = document.getElementById('language-toggle');
+        const narrativeDisplayContainer = document.getElementById('narrative-display-container');
+        const narrativeContentDiv = document.getElementById('narrative-content-div');
+        const mainPromptCardContainer = document.getElementById('main-prompt-card-container');
+        const sceneVariationsSection = document.getElementById('scene-variations-section');
+        const generateMultipleSceneVariationsBtn = document.getElementById('button_generate_multiple_scene_variations');
+        const sceneVariationsGrid = document.getElementById('scene-variations-grid');
+        const form = document.getElementById('character-form');
+        const generateOtomatisBtn = document.getElementById('button_auto_generate');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const loadingIndicatorAuto = document.getElementById('loading-indicator-auto');
+        const loadingIndicatorScene = document.getElementById('loading-indicator-scene');
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        const resultsSection = document.getElementById('results-section'); 
+        
+        let currentLang = localStorage.getItem('lang') || 'id';
+
+        // --- Theme Toggle Logic ---
+        const localTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.classList.add(localTheme);
+        updateThemeIcon(localTheme);
+
+        function updateThemeIcon(theme) {
+            themeIcon.classList.toggle('fa-sun', theme === 'dark');
+            themeIcon.classList.toggle('fa-moon', theme === 'light');
+        }
+        themeToggleBtn.addEventListener('click', () => {
+            const newTheme = htmlElement.classList.contains('light') ? 'dark' : 'light';
+            htmlElement.classList.remove('light', 'dark');
+            htmlElement.classList.add(newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        // --- Language Switcher Logic ---
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        function updateUI(langCode) {
+            const translations = langData[langCode];
+            document.querySelectorAll('[id]').forEach(element => {
+                const key = element.id;
+                if (translations[key]) {
+                    if (key.startsWith('placeholder_')) {
+                        element.placeholder = translations[key];
+                    } else if (key.startsWith('button_') && key.endsWith('_text')) {
+                        element.innerHTML = translations[key];
+                    } else if (element.tagName === 'BUTTON' && translations[key + '_text']) { 
+                        element.innerHTML = translations[key + '_text'];
+                    } else if (key === 'loading_text_auto' && translations[key]) { // Specifically for auto-gen loading text
+                        element.textContent = translations[key];
+                    }
+                    else {
+                        element.textContent = translations[key];
+                    }
+                }
+            });
+            languageToggleBtn.textContent = translations.lang_toggle_button;
+            document.title = translations.pageTitle;
+            renderAllContent(langCode); 
+        }
+        
+        function renderAllContent(langCode) {
+            const currentTranslations = langData[langCode];
+            if (generatedOutputsStore[langCode] && generatedOutputsStore[langCode].narrative) {
+                narrativeContentDiv.textContent = generatedOutputsStore[langCode].narrative;
+                narrativeDisplayContainer.classList.remove('hidden');
+            } else {
+                narrativeDisplayContainer.classList.add('hidden');
+            }
+
+            mainPromptCardContainer.innerHTML = '';
+            sceneVariationsGrid.innerHTML = '';
+            
+            if (generatedOutputsStore[langCode] && generatedOutputsStore[langCode].prompts.length > 0) {
+                const mainPromptText = generatedOutputsStore[langCode].prompts[0];
+                if (mainPromptText) {
+                     createPromptCard(mainPromptText, currentTranslations.card_title_main_prompt, mainPromptCardContainer, 0, 'main');
+                }
+            }
+
+            if (generatedOutputsStore[langCode] && generatedOutputsStore[langCode].prompts.length > 1) {
+                for (let i = 1; i < generatedOutputsStore[langCode].prompts.length; i++) {
+                    const variationPromptText = generatedOutputsStore[langCode].prompts[i];
+                    if (variationPromptText) {
+                        createPromptCard(variationPromptText, `${currentTranslations.card_title_variation_prefix}${i}`, sceneVariationsGrid, i, 'scene');
+                    }
+                }
+            }
+            
+            if (baseCharacterData && generatedOutputsStore[currentLang].prompts.length > 0) {
+                sceneVariationsSection.classList.remove('hidden');
+            } else {
+                sceneVariationsSection.classList.add('hidden');
+            }
+        }
+
+
+        function setLanguage(langCode) {
+            currentLang = langCode;
+            localStorage.setItem('lang', langCode);
+            updateUI(langCode); 
+            const toastMessage = langCode === 'id' ? langData.id.toast_switched_to_id : langData.en.toast_switched_to_en;
+            showToast(toastMessage);
+        }
+        languageToggleBtn.addEventListener('click', () => {
+            const newLang = currentLang === 'id' ? 'en' : 'id';
+            setLanguage(newLang);
+        });
+
+        // --- Form Validation and Generation Logic ---
+        function toggleWarning(fieldId, show) {
+            const warningElement = document.getElementById(`${fieldId}-warning`);
+            if (warningElement) {
+                warningElement.classList.toggle('hidden', !show);
+                if (show) {
+                    const warningKey = `warning_${fieldId.replace(/-/g, '_')}`;
+                    warningElement.textContent = langData[currentLang][warningKey] || langData[currentLang].error_fill_fields;
+                }
+            }
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const fields = ['characterName', 'age', 'gender', 'ethnicity', 'skinColor', 'hair', 'eye', 'facialFeatures', 'accessories', 'outfit', 'fashionStyle', 'poseExpression', 'activityProps', 'backgroundSetting', 'illustrationStyle', 'moodAtmosphere'];
+            fields.forEach(fieldId => {
+                const input = document.getElementById(fieldId);
+                if (input.value.trim() === '') {
+                    toggleWarning(fieldId, true); isValid = false;
+                } else {
+                    toggleWarning(fieldId, false);
+                }
+            });
+            if (!isValid) {
+                errorMessage.classList.remove('hidden');
+                errorText.textContent = langData[currentLang].error_fill_fields;
+                narrativeDisplayContainer.classList.add('hidden');
+                mainPromptCardContainer.innerHTML = ''; 
+                sceneVariationsGrid.innerHTML = ''; 
+                sceneVariationsSection.classList.add('hidden');
+            } else {
+                errorMessage.classList.add('hidden');
+            }
+            return isValid;
+        }
+
+        const corrections = { "animee": "anime", "realistiss": "realistis", "kartunn": "kartun", "fantasii": "fantasi", "lukisann": "lukisan", "airr": "air", "komikk": "komik", "digitall": "digital", "sketsaa": "sketsa", "pensill": "pensil", "misteriusss": "misterius", "ceriaa": "ceria", "dramatiss": "dramatis", "tenangg": "tenang", "suramm": "suram", "harapan": "harapan", "intenss": "intens", "damaii": "damai", "gelpa": "gelap", "nuansa": "nuansa", "suasana": "suasana"};
+        function handleCorrection(inputElement, correctionSpanId) {
+            const originalValue = inputElement.value.trim();
+            const lowerCaseValue = originalValue.toLowerCase();
+            const correctionSpan = document.getElementById(correctionSpanId);
+            if (inputElement.correctionTimeout) { clearTimeout(inputElement.correctionTimeout); }
+            if (corrections[lowerCaseValue] && corrections[lowerCaseValue] !== originalValue) {
+                const correctedValue = corrections[lowerCaseValue];
+                inputElement.value = correctedValue;
+                correctionSpan.textContent = `${langData[currentLang].correction_text_prefix}${correctedValue}`;
+                correctionSpan.classList.remove('hidden');
+                correctionSpan.classList.add(htmlElement.classList.contains('dark') ? 'text-yellow-400' : 'text-yellow-600');
+                inputElement.correctionTimeout = setTimeout(() => { correctionSpan.classList.add('hidden'); }, 2000);
+            } else {
+                correctionSpan.classList.add('hidden');
+            }
+        }
+
+        function copyToClipboard(textToCopy, feedbackElementId) {
+            const feedbackSpan = document.getElementById(feedbackElementId);
+            if (!feedbackSpan) { console.error("Feedback span not found:", feedbackElementId); return; }
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                document.execCommand('copy');
+                feedbackSpan.textContent = langData[currentLang].copy_feedback_success;
+                feedbackSpan.classList.remove('hidden', 'text-red-500');
+                feedbackSpan.classList.add('text-green-600');
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                feedbackSpan.textContent = langData[currentLang].copy_feedback_fail;
+                feedbackSpan.classList.remove('hidden', 'text-green-600');
+                feedbackSpan.classList.add('text-red-500');
+            } finally {
+                document.body.removeChild(tempTextArea);
+                setTimeout(() => { feedbackSpan.classList.add('hidden'); }, 2000);
+            }
+        }
+        
+        function createPromptCard(promptText, cardTitleText, containerElement, uniqueIndex, type = 'main') { 
+            const cardId = `prompt-card-${type}-${uniqueIndex}`;
+            const contentId = `prompt-content-${type}-${uniqueIndex}`;
+            const feedbackId = `copy-feedback-${type}-${uniqueIndex}`;
+
+            const card = document.createElement('div');
+            card.className = 'card bg-white dark:bg-zinc-800 p-4 rounded-xl shadow-md flex flex-col';
+            card.id = cardId;
+
+            const header = document.createElement('h4');
+            header.className = 'text-md font-semibold text-gray-800 dark:text-zinc-100 mb-2';
+            header.textContent = cardTitleText;
+            card.appendChild(header);
+
+            const content = document.createElement('div');
+            content.id = contentId;
+            content.className = 'text-sm text-gray-700 dark:text-zinc-300 whitespace-pre-wrap break-words flex-grow mb-3';
+            content.textContent = promptText;
+            card.appendChild(content);
+
+            const copyButton = document.createElement('button');
+            copyButton.className = 'mt-auto text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 py-1 px-2 rounded-md border border-blue-500 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-zinc-700 transition-colors self-start';
+            copyButton.innerHTML = langData[currentLang].button_copy_prompt_card_text;
+            copyButton.onclick = () => copyToClipboard(promptText, feedbackId); 
+            
+            const feedbackSpan = document.createElement('span');
+            feedbackSpan.id = feedbackId;
+            feedbackSpan.className = 'text-xs ml-2 hidden';
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'flex items-center';
+            buttonContainer.appendChild(copyButton);
+            buttonContainer.appendChild(feedbackSpan);
+            card.appendChild(buttonContainer);
+            
+            containerElement.appendChild(card);
+        }
+
+        // Auto Generate Character Form using EXPANDED randomData and characterArchetypes
+        function generateCharacterForm() {
+            const mainGenerateButton = document.getElementById('button_generate_prompt');
+            loadingIndicatorAuto.classList.remove('hidden');
+            generateOtomatisBtn.disabled = true;
+            mainGenerateButton.disabled = true;
+
+
+            // Simulate a short delay for the loading effect, then populate form
+            setTimeout(() => {
+                const currentRandomData = randomData; 
+                const currentArchetypes = characterArchetypes; 
+
+                const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+                const fieldsToClearWarnings = [ 'characterName', 'age', 'gender', 'ethnicity', 'skinColor', 'hair', 'eye', 'facialFeatures', 'accessories', 'outfit', 'fashionStyle', 'poseExpression', 'activityProps', 'backgroundSetting', 'illustrationStyle', 'moodAtmosphere' ];
+                fieldsToClearWarnings.forEach(fieldId => {
+                    toggleWarning(fieldId, false);
+                    const correctionSpan = document.getElementById(`${fieldId}-correction`);
+                    if (correctionSpan) {
+                        correctionSpan.classList.add('hidden');
+                        const inputElement = document.getElementById(fieldId);
+                        if (inputElement && inputElement.correctionTimeout) { clearTimeout(inputElement.correctionTimeout); delete inputElement.correctionTimeout; }
+                    }
+                });
+                const selectedGender = getRandom(currentRandomData.genders);
+                document.getElementById('gender').value = selectedGender;
+                document.getElementById('characterName').value = selectedGender === 'Male' ? getRandom(currentRandomData.maleNames) : getRandom(currentRandomData.femaleNames);
+                document.getElementById('age').value = getRandom(currentRandomData.ages);
+                document.getElementById('ethnicity').value = getRandom(currentRandomData.ethnicities);
+                document.getElementById('skinColor').value = getRandom(currentRandomData.skinColors);
+                document.getElementById('hair').value = `${getRandom(currentRandomData.hairColors)} ${getRandom(currentRandomData.hairStyles)}`;
+                document.getElementById('eye').value = `${getRandom(currentRandomData.eyeColors)} ${getRandom(currentRandomData.eyeShapes)}`;
+                document.getElementById('facialFeatures').value = getRandom(currentRandomData.facialFeatures);
+                document.getElementById('accessories').value = getRandom(currentRandomData.accessories);
+                
+                const selectedArchetype = getRandom(currentArchetypes);
+                document.getElementById('outfit').value = selectedArchetype.outfit;
+                document.getElementById('fashionStyle').value = selectedArchetype.fashionStyle;
+                document.getElementById('poseExpression').value = selectedArchetype.poseExpression;
+                document.getElementById('activityProps').value = selectedArchetype.activityProps;
+                document.getElementById('backgroundSetting').value = selectedArchetype.backgroundSetting;
+                document.getElementById('illustrationStyle').value = selectedArchetype.illustrationStyle;
+                document.getElementById('moodAtmosphere').value = selectedArchetype.moodAtmosphere;
+
+                loadingIndicatorAuto.classList.add('hidden');
+                generateOtomatisBtn.disabled = false;
+                mainGenerateButton.disabled = false;
+            }, 300); // 300ms delay for visual feedback
+        }
+        generateOtomatisBtn.addEventListener('click', generateCharacterForm);
+
+        // Main Prompt Generation (Single Character)
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (!validateForm()) { resultsSection.scrollIntoView({ behavior: 'smooth' }); return; }
+            
+            loadingIndicator.classList.remove('hidden');
+            narrativeDisplayContainer.classList.add('hidden');
+            mainPromptCardContainer.innerHTML = ''; 
+            sceneVariationsGrid.innerHTML = ''; 
+            sceneVariationsSection.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            variationCounter = 0; 
+
+            const currentFormData = { characterName: document.getElementById('characterName').value, age: document.getElementById('age').value, gender: document.getElementById('gender').value, ethnicity: document.getElementById('ethnicity').value, skinColor: document.getElementById('skinColor').value, hair: document.getElementById('hair').value, eye: document.getElementById('eye').value, facialFeatures: document.getElementById('facialFeatures').value, accessories: document.getElementById('accessories').value, outfit: document.getElementById('outfit').value, fashionStyle: document.getElementById('fashionStyle').value, poseExpression: document.getElementById('poseExpression').value, activityProps: document.getElementById('activityProps').value, backgroundSetting: document.getElementById('backgroundSetting').value, illustrationStyle: document.getElementById('illustrationStyle').value, moodAtmosphere: document.getElementById('moodAtmosphere').value };
+            
+            const llmPrompt = `Generate a character narrative in Bahasa Indonesia, a prompt in Bahasa Indonesia, a character narrative in English, and a prompt in English based on the following details.
+IMPORTANT: The "prompt_id" and "prompt_en" fields in the JSON output MUST contain the complete, full-text, ready-to-use image generation prompt. Do NOT use short labels or keys.
+
+Character Details:
+- Character Name: ${currentFormData.characterName}
+- Age: ${currentFormData.age}
+- Gender: ${currentFormData.gender}
+- Ethnicity: ${currentFormData.ethnicity}
+- Skin Color: ${currentFormData.skinColor}
+- Hair Color & Style: ${currentFormData.hair}
+- Eye Color & Shape: ${currentFormData.eye}
+- Facial Features: ${currentFormData.facialFeatures}
+- Face/Body Accessories: ${currentFormData.accessories}
+- Main Outfit: ${currentFormData.outfit}
+- General Fashion Style: ${currentFormData.fashionStyle}
+- Pose or Favorite Expression: ${currentFormData.poseExpression}
+- Key Activity or Props: ${currentFormData.activityProps}
+- General Background or Setting: ${currentFormData.backgroundSetting}
+- Illustration Style: ${currentFormData.illustrationStyle}
+- Mood or Atmosphere: ${currentFormData.moodAtmosphere}
+
+Example JSON structure:
+{
+  "narrative_id": "Narasi karakter dalam Bahasa Indonesia...",
+  "prompt_id": "Teks LENGKAP dari prompt generasi gambar untuk karakter ini dalam Bahasa Indonesia, detail dan siap pakai.",
+  "narrative_en": "Character narrative in English...",
+  "prompt_en": "The COMPLETE text of the image generation prompt for this character in English, detailed and ready to use."
+}`;
+            try {
+                const payload = { contents: [{ role: "user", parts: [{ text: llmPrompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { "narrative_id": { "type": "STRING" }, "prompt_id": { "type": "STRING" }, "narrative_en": { "type": "STRING" }, "prompt_en": { "type": "STRING" } }, "propertyOrdering": ["narrative_id", "prompt_id", "narrative_en", "prompt_en"] } } };
+                const apiKey = "AIzaSyCI8gH3KftmB_mEhg9sCrdDWA1S02VbOEk"; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+
+                if (!response.ok) {
+                    let errorBody = "Could not retrieve error body."; try { errorBody = await response.text(); } catch (e) {}
+                    console.error('API request failed (Main):', response.status, errorBody);
+                    errorMessage.classList.remove('hidden'); errorText.textContent = (langData[currentLang].error_api_fail_status || "Server error: ") + `${response.status})` + (errorBody.length < 100 ? ` - ${errorBody}` : '');
+                    baseCharacterData = null; return;
+                }
+                const result = await response.json();
+                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    const jsonText = result.candidates[0].content.parts[0].text;
+                    try {
+                        const parsedJson = JSON.parse(jsonText);
+                        generatedOutputsStore.id = { narrative: parsedJson.narrative_id || "", prompts: [parsedJson.prompt_id || "Prompt tidak tersedia."] };
+                        generatedOutputsStore.en = { narrative: parsedJson.narrative_en || "", prompts: [parsedJson.prompt_en || "Prompt not available."] };
+                        baseCharacterData = { ...currentFormData };
+                        variationCounter = 0; 
+                        renderAllContent(currentLang); 
+                        sceneVariationsSection.classList.remove('hidden');
+                    } catch (parseError) {
+                        console.error('Failed to parse JSON (Main):', parseError, jsonText);
+                        errorMessage.classList.remove('hidden'); errorText.textContent = langData[currentLang].error_api_fail_json || "Invalid API response format.";
+                        baseCharacterData = null;
+                    }
+                } else {
+                    console.error('API response structure unexpected (Main):', result);
+                    errorMessage.classList.remove('hidden'); errorText.textContent = langData[currentLang].error_api_fail || "Invalid API response.";
+                    baseCharacterData = null;
+                }
+            } catch (error) {
+                console.error('Error generating main prompt:', error);
+                errorMessage.classList.remove('hidden'); errorText.textContent = `${langData[currentLang].error_generic_prefix || "Error: "}${error.message}`;
+                baseCharacterData = null;
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        });
+
+        // Generate Multiple Scene Variations (for single main character)
+        generateMultipleSceneVariationsBtn.addEventListener('click', async () => {
+            if (!baseCharacterData) {
+                errorMessage.classList.remove('hidden'); errorText.textContent = langData[currentLang].error_no_base_character;
+                resultsSection.scrollIntoView({ behavior: 'smooth' }); return;
+            }
+            loadingIndicatorScene.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+            const numberOfVariations = 2; 
+            for (let i = 0; i < numberOfVariations; i++) {
+                variationCounter++; 
+                const currentSceneOptions = sceneOptions[currentLang] || sceneOptions.en;
+                const newSceneContext = { pose: getRandomElement(currentSceneOptions.poses), action: getRandomElement(currentSceneOptions.actions), setting: getRandomElement(currentSceneOptions.settings), mood: getRandomElement(currentSceneOptions.moods) };
+
+                const llmScenePrompt = `You are an assistant for generating image prompts.
+Given the base character details and a new scene context, create a concise image prompt.
+The character's core identity, appearance, outfit, and illustration style MUST remain consistent.
+ONLY the pose, action, setting, and mood should change.
+IMPORTANT: The "prompt_id" and "prompt_en" fields in the JSON output MUST contain the complete, full-text, ready-to-use image generation prompt for the scene variation. Do NOT use short labels or keys.
+
+Base Character:
+Name: ${baseCharacterData.characterName}, Age: ${baseCharacterData.age}, Gender: ${baseCharacterData.gender}, Ethnicity: ${baseCharacterData.ethnicity}, Skin: ${baseCharacterData.skinColor}, Hair: ${baseCharacterData.hair}, Eyes: ${baseCharacterData.eye}, Features: ${baseCharacterData.facialFeatures}, Accessories: ${baseCharacterData.accessories}, Outfit: ${baseCharacterData.outfit}, Illustration Style: ${baseCharacterData.illustrationStyle}.
+
+New Scene Context (for ${currentLang === 'id' ? 'Bahasa Indonesia' : 'English'}):
+Pose: ${newSceneContext.pose}, Action: ${newSceneContext.action}, Setting: ${newSceneContext.setting}, Mood: ${newSceneContext.mood}.
+
+Example JSON structure:
+{
+  "prompt_id": "Teks LENGKAP dari prompt generasi gambar untuk variasi adegan ini dalam Bahasa Indonesia, detail dan siap pakai.",
+  "prompt_en": "The COMPLETE text of the image generation prompt for this scene variation in English, detailed and ready to use."
+}`;
+
+                try {
+                    const payload = { contents: [{ role: "user", parts: [{ text: llmScenePrompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { "prompt_id": { "type": "STRING" }, "prompt_en": { "type": "STRING" } }, "propertyOrdering": ["prompt_id", "prompt_en"] } } };
+                    const apiKey = ""; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+
+                    if (!response.ok) {
+                        let errorBody = "Could not retrieve error body."; try { errorBody = await response.text(); } catch (e) {}
+                        console.error(`API request failed (Scene Variation ${variationCounter}):`, response.status, errorBody);
+                        const errorCardTitle = `${langData[currentLang].card_title_variation_prefix}${variationCounter} - Error`;
+                        createPromptCard((langData[currentLang].error_api_fail_status || "Server error: ") + `${response.status})`, errorCardTitle, sceneVariationsGrid, variationCounter, 'scene_error'); 
+                        continue; 
+                    }
+                    const result = await response.json();
+                    if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        const jsonText = result.candidates[0].content.parts[0].text;
+                        try {
+                            const parsedJson = JSON.parse(jsonText);
+                            const promptIdText = parsedJson.prompt_id || "Prompt variasi tidak tersedia.";
+                            const promptEnText = parsedJson.prompt_en || "Variation prompt not available.";
+                            generatedOutputsStore.id.prompts.push(promptIdText);
+                            generatedOutputsStore.en.prompts.push(promptEnText);
+                            
+                            const currentPromptText = currentLang === 'id' ? promptIdText : promptEnText;
+                            createPromptCard(currentPromptText, `${langData[currentLang].card_title_variation_prefix}${variationCounter}`, sceneVariationsGrid, variationCounter, 'scene');
+                        } catch (parseError) {
+                            console.error(`Failed to parse JSON (Scene Variation ${variationCounter}):`, parseError, jsonText);
+                            createPromptCard(langData[currentLang].error_api_fail_json, `${langData[currentLang].card_title_variation_prefix}${variationCounter} - Error`, sceneVariationsGrid, variationCounter, 'scene_error');
+                        }
+                    } else {
+                        console.error(`API response structure unexpected (Scene Variation ${variationCounter}):`, result);
+                         createPromptCard(langData[currentLang].error_api_fail, `${langData[currentLang].card_title_variation_prefix}${variationCounter} - Error`, sceneVariationsGrid, variationCounter, 'scene_error');
+                    }
+                } catch (error) {
+                    console.error(`Error generating scene variation ${variationCounter}:`, error);
+                    createPromptCard(`${langData[currentLang].error_generic_prefix}${error.message}`, `${langData[currentLang].card_title_variation_prefix}${variationCounter} - Error`, sceneVariationsGrid, variationCounter, 'scene_error');
+                }
+            } 
+            loadingIndicatorScene.classList.add('hidden');
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            setLanguage(currentLang);
+            // Log dataset lengths for debugging
+            console.log("--- Dataset Lengths for Auto-Generation ---");
+            console.log("Male Names:", randomData.maleNames.length);
+            console.log("Female Names:", randomData.femaleNames.length);
+            console.log("Ages:", randomData.ages.length);
+            console.log("Genders:", randomData.genders.length); 
+            console.log("Ethnicities:", randomData.ethnicities.length);
+            console.log("Skin Colors:", randomData.skinColors.length); 
+            console.log("Hair Colors:", randomData.hairColors.length);
+            console.log("Hair Styles:", randomData.hairStyles.length);
+            console.log("Eye Colors:", randomData.eyeColors.length);
+            console.log("Eye Shapes:", randomData.eyeShapes.length); 
+            console.log("Facial Features:", randomData.facialFeatures.length);
+            console.log("Accessories:", randomData.accessories.length);
+            console.log("Character Archetypes (provides outfits, fashion styles, poses, etc.):", characterArchetypes.length);
+            console.log("--- Scene Options Lengths (per language) ---");
+            console.log("ID Poses:", sceneOptions.id.poses.length);
+            console.log("ID Actions:", sceneOptions.id.actions.length);
+            console.log("ID Settings:", sceneOptions.id.settings.length);
+            console.log("ID Moods:", sceneOptions.id.moods.length);
+            console.log("EN Poses:", sceneOptions.en.poses.length);
+            console.log("EN Actions:", sceneOptions.en.actions.length);
+            console.log("EN Settings:", sceneOptions.en.settings.length);
+            console.log("EN Moods:", sceneOptions.en.moods.length);
+            console.log("-------------------------------------------");
+        });
+    </script>
+</body>
+</html>
+
